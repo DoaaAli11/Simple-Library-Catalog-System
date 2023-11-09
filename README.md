@@ -7,11 +7,6 @@ And stored using **primary index** and **secondry index** as follows:
 - Primary index using the ISBN (for Books data file). 
 - Secondary index using the Author ID (for the Books data file). 
 - Secondary index using the Author Name (for the Authors data file).
-
-### These are the operations that the admin could do:
-- add a book record / an author record
-- delete a book record / an author record
-
 ### And this is the main welcome screen:
 - Add New Author
 - Add New Book 
