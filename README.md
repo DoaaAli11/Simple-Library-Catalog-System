@@ -2,7 +2,9 @@
 ## This is a simple library catalog system designed using *C++* programming language and *text files* database
 
 In this system the data is stored in text files using **delimited fields and length indicator record** format.
-And stored using **primary index** and **secondry index** as follows:
+
+
+And the system uses **primary index** and **secondry index** to make any operation as follows:
 - Primary index using the Author ID (for Authors data file). 
 - Primary index using the ISBN (for Books data file). 
 - Secondary index using the Author ID (for the Books data file). 
