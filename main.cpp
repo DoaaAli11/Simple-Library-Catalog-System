@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "SLS.cpp"
 #include "SLS.h"
 
 using namespace std;
@@ -7,6 +8,7 @@ int main()
 {
     SLS system;
     int choice = 1;
+    cout<<"Welcome to our simple library system :)\n\n";
     while (choice != 0)
     {
         cout << "1 - Add New Author\n"
@@ -18,7 +20,7 @@ int main()
                 "7 - Print Author(Author ID)\n"
                 "8 - Print Book(ISBN)\n"
                 "9 - Write Query\n"
-                "0 - Exit\n";
+                "0 - Exit\n\n";
         cout << "Enter your choice:";
         cin >> choice;
         switch (choice)
@@ -56,7 +58,7 @@ int main()
         }
     }
 
-    cout<<"Thanks for using our system :)\n";
+    cout<<"\nThanks for using our system :)\n";
 
     return 0;
 }
