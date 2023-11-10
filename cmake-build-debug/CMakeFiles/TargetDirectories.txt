@@ -1,0 +1,3 @@
+F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug/CMakeFiles/SLS.dir
+F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug/CMakeFiles/rebuild_cache.dir
