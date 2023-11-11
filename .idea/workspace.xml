@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+    <generated>
+      <config projectName="Simple_Library_Catalog_System" targetName="Simple_Library_Catalog_System" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -9,8 +11,21 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c90e7a88-3033-4a57-8e1b-e81ad0fcc727" name="Changes" comment="Creating the main structure of the system">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="c90e7a88-3033-4a57-8e1b-e81ad0fcc727" name="Changes" comment="Fix linking files">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cache-v2-f9468f115cef17bf2718.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-0d423278abd37474c240.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-7ce26b7cd8fa362d468f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2023-11-11T00-11-15-0673.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-Simple_Library_Catalog_System-Debug-15817da4f3541029411b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/SLS.cpp.obj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/main.cpp.obj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/Simple_Library_Catalog_System.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +35,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -52,7 +68,7 @@
         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SLS" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SLS" TARGET_NAME="SLS" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SLS" RUN_TARGET_NAME="SLS">
+    <configuration name="Simple_Library_Catalog_System" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Simple_Library_Catalog_System" TARGET_NAME="Simple_Library_Catalog_System" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Simple_Library_Catalog_System" RUN_TARGET_NAME="Simple_Library_Catalog_System">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -71,6 +87,8 @@
       <workItem from="1699652705551" duration="1463000" />
       <workItem from="1699654519636" duration="828000" />
       <workItem from="1699655859082" duration="971000" />
+      <workItem from="1699661315850" duration="31000" />
+      <workItem from="1699661396383" duration="530000" />
     </task>
     <task id="LOCAL؜٠٠٠٠١" summary="Creating the main structure of the system">
       <created>1699656306439</created>
@@ -78,7 +96,19 @@
       <option name="presentableId" value="LOCAL؜٠٠٠٠١" />
       <updated>1699656306455</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL؜٠٠٠٠٢" summary="Fix linking files">
+      <created>1699661811061</created>
+      <option name="number" value="LOCAL؜٠٠٠٠٢" />
+      <option name="presentableId" value="LOCAL؜٠٠٠٠٢" />
+      <updated>1699661811061</updated>
+    </task>
+    <task id="LOCAL؜٠٠٠٠٣" summary="Fix linking files">
+      <created>1699661922707</created>
+      <option name="number" value="LOCAL؜٠٠٠٠٣" />
+      <option name="presentableId" value="LOCAL؜٠٠٠٠٣" />
+      <updated>1699661922710</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -97,6 +127,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Creating the main structure of the system" />
-    <option name="LAST_COMMIT_MESSAGE" value="Creating the main structure of the system" />
+    <MESSAGE value="Fix linking files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix linking files" />
   </component>
 </project>

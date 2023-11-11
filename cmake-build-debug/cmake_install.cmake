@@ -1,8 +1,8 @@
-# Install script for directory: F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS
+# Install script for directory: F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/SLS")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Simple_Library_Catalog_System")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

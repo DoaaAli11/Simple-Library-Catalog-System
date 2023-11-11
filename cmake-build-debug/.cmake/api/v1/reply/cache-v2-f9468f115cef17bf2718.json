@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "f:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug"
+			"value" : "f:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -623,7 +623,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS"
+			"value" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -635,7 +635,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Program Files (x86)/SLS"
+			"value" : "C:/Program Files (x86)/Simple_Library_Catalog_System"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -851,7 +851,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "SLS"
+			"value" : "Simple_Library_Catalog_System"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1230,7 +1230,7 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "SLS_BINARY_DIR",
+			"name" : "Simple_Library_Catalog_System_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -1239,10 +1239,10 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug"
+			"value" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug"
 		},
 		{
-			"name" : "SLS_IS_TOP_LEVEL",
+			"name" : "Simple_Library_Catalog_System_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -1254,7 +1254,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "SLS_SOURCE_DIR",
+			"name" : "Simple_Library_Catalog_System_SOURCE_DIR",
 			"properties" : 
 			[
 				{
@@ -1263,7 +1263,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS"
+			"value" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System"
 		}
 	],
 	"kind" : "cache",

@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: SLS
+# Project: Simple_Library_Catalog_System
 # Configurations: Debug
 # =============================================================================
 
@@ -39,68 +39,13 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = F$:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug/
-# =============================================================================
-# Object build statements for EXECUTABLE target SLS
-
-
-#############################################
-# Order-only phony target for SLS
-
-build cmake_object_order_depends_target_SLS: phony || CMakeFiles/SLS.dir
-
-build CMakeFiles/SLS.dir/main.cpp.obj: CXX_COMPILER__SLS_Debug F$:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/main.cpp || cmake_object_order_depends_target_SLS
-  DEP_FILE = CMakeFiles\SLS.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++14
-  OBJECT_DIR = CMakeFiles\SLS.dir
-  OBJECT_FILE_DIR = CMakeFiles\SLS.dir
-  TARGET_COMPILE_PDB = CMakeFiles\SLS.dir\
-  TARGET_PDB = SLS.pdb
-
-build CMakeFiles/SLS.dir/SLS.cpp.obj: CXX_COMPILER__SLS_Debug F$:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/SLS.cpp || cmake_object_order_depends_target_SLS
-  DEP_FILE = CMakeFiles\SLS.dir\SLS.cpp.obj.d
-  FLAGS = -g -std=gnu++14
-  OBJECT_DIR = CMakeFiles\SLS.dir
-  OBJECT_FILE_DIR = CMakeFiles\SLS.dir
-  TARGET_COMPILE_PDB = CMakeFiles\SLS.dir\
-  TARGET_PDB = SLS.pdb
-
-
-# =============================================================================
-# Link build statements for EXECUTABLE target SLS
-
-
-#############################################
-# Link the executable SLS.exe
-
-build SLS.exe: CXX_EXECUTABLE_LINKER__SLS_Debug CMakeFiles/SLS.dir/main.cpp.obj CMakeFiles/SLS.dir/SLS.cpp.obj
-  FLAGS = -g
-  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
-  OBJECT_DIR = CMakeFiles\SLS.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\SLS.dir\
-  TARGET_FILE = SLS.exe
-  TARGET_IMPLIB = libSLS.dll.a
-  TARGET_PDB = SLS.pdb
-
-
-#############################################
-# Utility command for edit_cache
-
-build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D F:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS\cmake-build-debug && "C:\Program Files\JetBrains\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
-  DESC = No interactive CMake dialog available...
-  restat = 1
-
-build edit_cache: phony CMakeFiles/edit_cache.util
-
+cmake_ninja_workdir = F$:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug/
 
 #############################################
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D F:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS\cmake-build-debug && "C:\Program Files\JetBrains\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -SF:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS -BF:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS\cmake-build-debug"
+  COMMAND = cmd.exe /C "cd /D F:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS\Simple-Library-Catalog-System\cmake-build-debug && "C:\Program Files\JetBrains\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -SF:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS\Simple-Library-Catalog-System -BF:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS\Simple-Library-Catalog-System\cmake-build-debug"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -108,9 +53,66 @@ build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Object build statements for EXECUTABLE target Simple_Library_Catalog_System
+
+
+#############################################
+# Order-only phony target for Simple_Library_Catalog_System
+
+build cmake_object_order_depends_target_Simple_Library_Catalog_System: phony || CMakeFiles/Simple_Library_Catalog_System.dir
+
+build CMakeFiles/Simple_Library_Catalog_System.dir/main.cpp.obj: CXX_COMPILER__Simple_Library_Catalog_System_Debug F$:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/main.cpp || cmake_object_order_depends_target_Simple_Library_Catalog_System
+  DEP_FILE = CMakeFiles\Simple_Library_Catalog_System.dir\main.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IF:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/.
+  OBJECT_DIR = CMakeFiles\Simple_Library_Catalog_System.dir
+  OBJECT_FILE_DIR = CMakeFiles\Simple_Library_Catalog_System.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Simple_Library_Catalog_System.dir\
+  TARGET_PDB = Simple_Library_Catalog_System.pdb
+
+build CMakeFiles/Simple_Library_Catalog_System.dir/SLS.cpp.obj: CXX_COMPILER__Simple_Library_Catalog_System_Debug F$:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/SLS.cpp || cmake_object_order_depends_target_Simple_Library_Catalog_System
+  DEP_FILE = CMakeFiles\Simple_Library_Catalog_System.dir\SLS.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IF:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/.
+  OBJECT_DIR = CMakeFiles\Simple_Library_Catalog_System.dir
+  OBJECT_FILE_DIR = CMakeFiles\Simple_Library_Catalog_System.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Simple_Library_Catalog_System.dir\
+  TARGET_PDB = Simple_Library_Catalog_System.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Simple_Library_Catalog_System
+
+
+#############################################
+# Link the executable Simple_Library_Catalog_System.exe
+
+build Simple_Library_Catalog_System.exe: CXX_EXECUTABLE_LINKER__Simple_Library_Catalog_System_Debug CMakeFiles/Simple_Library_Catalog_System.dir/main.cpp.obj CMakeFiles/Simple_Library_Catalog_System.dir/SLS.cpp.obj
+  FLAGS = -g
+  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\Simple_Library_Catalog_System.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Simple_Library_Catalog_System.dir\
+  TARGET_FILE = Simple_Library_Catalog_System.exe
+  TARGET_IMPLIB = libSimple_Library_Catalog_System.dll.a
+  TARGET_PDB = Simple_Library_Catalog_System.pdb
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D F:\Academic_Years\3-Third_Year\1st\files\assignments\a1\SLS\Simple-Library-Catalog-System\cmake-build-debug && "C:\Program Files\JetBrains\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+# =============================================================================
 # Target aliases.
 
-build SLS: phony SLS.exe
+build Simple_Library_Catalog_System: phony Simple_Library_Catalog_System.exe
 
 # =============================================================================
 # Folder targets.
@@ -118,9 +120,9 @@ build SLS: phony SLS.exe
 # =============================================================================
 
 #############################################
-# Folder: F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/cmake-build-debug
+# Folder: F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug
 
-build all: phony SLS.exe
+build all: phony Simple_Library_Catalog_System.exe
 
 # =============================================================================
 # Built-in targets
