@@ -12,19 +12,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c90e7a88-3033-4a57-8e1b-e81ad0fcc727" name="Changes" comment="Fix linking files">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cache-v2-f9468f115cef17bf2718.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-0d423278abd37474c240.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-7ce26b7cd8fa362d468f.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2023-11-11T00-11-15-0673.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-Simple_Library_Catalog_System-Debug-15817da4f3541029411b.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/SLS.cpp.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/main.cpp.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/Simple_Library_Catalog_System.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SLS.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SLS.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SLS.h" beforeDir="false" afterPath="$PROJECT_DIR$/SLS.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/SLS.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/SLS.cpp.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir/main.cpp.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Simple_Library_Catalog_System.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Simple_Library_Catalog_System.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,11 +60,6 @@
     <property name="cmake.loaded.for.project" value="true" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Simple_Library_Catalog_System" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Simple_Library_Catalog_System" TARGET_NAME="Simple_Library_Catalog_System" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Simple_Library_Catalog_System" RUN_TARGET_NAME="Simple_Library_Catalog_System">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -89,6 +81,8 @@
       <workItem from="1699655859082" duration="971000" />
       <workItem from="1699661315850" duration="31000" />
       <workItem from="1699661396383" duration="530000" />
+      <workItem from="1700860993377" duration="2663000" />
+      <workItem from="1700864084814" duration="413000" />
     </task>
     <task id="LOCAL؜٠٠٠٠١" summary="Creating the main structure of the system">
       <created>1699656306439</created>

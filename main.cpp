@@ -54,8 +54,10 @@ int main()
         case 9:
             system.query();
             break;
-
+        case 0:
+            break;
         default:
+            cout<<"\nWrong input!\nTry again.\n\n";
             break;
         }
     }

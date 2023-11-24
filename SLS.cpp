@@ -28,7 +28,9 @@ Book::Book(char isbn[15], char t[30], char aID[15])
     strcpy(this->authorID, aID);
 }
 
-SLS::SLS() {}
+SLS::SLS() {
+    openFile(bookFile, "Books.txt");
+}
 
 SLS::SLS(Author a)
 {
@@ -46,25 +48,28 @@ SLS::SLS(Author a, Book b)
     this->book = b;
 }
 
-SLS::~SLS() {}
+SLS::~SLS() {
+    closeFile(bookFile);
+}
 
-void SLS::openFile(fstream file, string fileName)
+void SLS::openFile(fstream& file, string fileName)
 {
     file.open(fileName, ios::in | ios::out | ios::app | ios::binary);
 }
 
-void SLS::closeFile(fstream file)
+void SLS::closeFile(fstream& file)
 {
     file.close();
 }
 
-void SLS::readFromFile(fstream file)
-{
-}
-
-void SLS::writeToFile(fstream file)
-{
-}
+//void SLS::readFromFile(fstream& file)
+//{
+//}
+//
+//void SLS::writeToFile(fstream& file,const char ojc[])
+//{
+//    file.write(ojc,sizeof(ojc));
+//}
 
 void SLS::addAuthor()
 {
@@ -72,6 +77,19 @@ void SLS::addAuthor()
 
 void SLS::addBook()
 {
+    char isbn[15], t[30], aid[15];
+    cin.ignore();
+    cout<<"Enter book's ISBN:";
+    cin.getline(isbn, 15);
+    cout<<"Enter book's title:";
+    cin.getline(t, 30);
+    cout<<"Enter book's author's ID:";
+    cin.getline(aid, 15);
+
+    this->book = Book(isbn, t, aid);
+
+    bookFile.write((char*)& book, sizeof(book));
+    cout<<"\nBook added successfully.\n\n";
 }
 
 void SLS::updateAuthorName()
@@ -96,6 +114,26 @@ void SLS::printAuthor()
 
 void SLS::printBook()
 {
+    vector<Book> books;
+
+    bookFile.seekg (0,ios::end);
+    long long size = bookFile.tellg();
+    bookFile.seekg(0);
+
+    int n = size / 60;
+//    cout<<n<<endl;
+
+    for(int i=0;i<n;i++) {
+        bookFile.read((char *) &book, sizeof(book));
+        books.push_back(book);
+    }
+
+    for(Book b:books){
+        cout<<"ISBN: "<<b.ISBN<<endl;
+        cout<<"Book title: "<<b.title<<endl;
+        cout<<"book author ID: "<<b.authorID<<endl;
+        cout<<"------------------"<<endl;
+    }
 }
 
 void SLS::query()

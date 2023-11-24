@@ -43,10 +43,10 @@ private:
     //
 
     // main file's functions
-    void openFile(fstream file, string fileName);
-    void closeFile(fstream file);
-    void readFromFile(fstream file);
-    void writeToFile(fstream file);
+    static void openFile(fstream& file, string fileName);
+    static void closeFile(fstream& file);
+//    void readFromFile(fstream& file);
+//    static void writeToFile(fstream& file,const char ojc[]);
 
     //
     // add your own index functions and any other functions as you need
