@@ -37,14 +37,15 @@ private:
     // author and book files that contain the records
     fstream authorFile;
     fstream bookFile;
+    fstream primaryIFile;
 
     //
     // add your own index files as you need
     //
 
     // main file's functions
-    static void openFile(fstream& file, string fileName);
-    static void closeFile(fstream& file);
+    void updateISBNIndex(char* isbn, int rrn, bool flag);
+    int updateBookFileHeader(bool flag);
 //    void readFromFile(fstream& file);
 //    static void writeToFile(fstream& file,const char ojc[]);
 

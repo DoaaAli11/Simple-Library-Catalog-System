@@ -29,7 +29,7 @@ Book::Book(char isbn[15], char t[30], char aID[15])
 }
 
 SLS::SLS() {
-    openFile(bookFile, "Books.txt");
+
 }
 
 SLS::SLS(Author a)
@@ -49,17 +49,6 @@ SLS::SLS(Author a, Book b)
 }
 
 SLS::~SLS() {
-    closeFile(bookFile);
-}
-
-void SLS::openFile(fstream& file, string fileName)
-{
-    file.open(fileName, ios::in | ios::out | ios::app | ios::binary);
-}
-
-void SLS::closeFile(fstream& file)
-{
-    file.close();
 }
 
 //void SLS::readFromFile(fstream& file)
@@ -77,19 +66,47 @@ void SLS::addAuthor()
 
 void SLS::addBook()
 {
+    bookFile.open("Books.txt", ios::out | ios:: binary | ios::app | ios::in);
+    // Check if the file is open
+    if (!bookFile.is_open()) {
+        cout << "Error opening file\n";
+        return;
+    }
+
+//    if (bookFile.peek() == EOF)
+//    {
+//        char* size = "0";
+//        char* AVAIL = "-1";
+//        bookFile.write(size,sizeof (size));
+//        bookFile << "|";
+//        bookFile.write(AVAIL,sizeof (AVAIL));
+//        bookFile << "\n";
+//
+//    }
+
     char isbn[15], t[30], aid[15];
     cin.ignore();
-    cout<<"Enter book's ISBN:";
-    cin.getline(isbn, 15);
-    cout<<"Enter book's title:";
-    cin.getline(t, 30);
-    cout<<"Enter book's author's ID:";
-    cin.getline(aid, 15);
+    cout << "Enter book's ISBN:";
+    cin >> isbn;
+    cout << "Enter book's title:";
+    cin >> t;
+    cout << "Enter book's author's ID:";
+    cin >> aid;
 
     this->book = Book(isbn, t, aid);
 
-    bookFile.write((char*)& book, sizeof(book));
-    cout<<"\nBook added successfully.\n\n";
+    // Write data as binary structure
+    bookFile.seekp(0, ios::end);
+    bookFile.write((char*)(&book), sizeof(book));
+
+
+    int newSize = updateBookFileHeader(true);
+    updateISBNIndex(book.ISBN, newSize, true);
+    cout << "\nBook added successfully.\n\n";
+
+    // Flush and close the file
+    bookFile.flush();
+    bookFile.close();
 }
 
 void SLS::updateAuthorName()
@@ -114,6 +131,7 @@ void SLS::printAuthor()
 
 void SLS::printBook()
 {
+    bookFile.open("Books.txt", ios::in);
     vector<Book> books;
 
     bookFile.seekg (0,ios::end);
@@ -139,3 +157,63 @@ void SLS::printBook()
 void SLS::query()
 {
 }
+
+void SLS::updateISBNIndex(char isbn[15], int rrn, bool flag) {
+    map<char*, int> primaryI;
+
+    primaryIFile.open("ISBNIndex.txt", ios::app | ios::in);
+    primaryIFile.seekg (0,ios::end);
+    long long size = primaryIFile.tellg();
+    primaryIFile.seekg(0);
+
+    int n = size / 18;
+    if(flag)                    //addition
+    {
+        if(primaryIFile.eof())
+        {
+            primaryIFile << isbn << '|';
+            primaryIFile << rrn << '\n';
+            return;
+        }
+        primaryI.insert({isbn, rrn});
+
+        for(int i = 0; i < n; i++) {
+            primaryIFile.read(isbn,'|');
+            primaryIFile >> rrn;
+            primaryI.insert({isbn, rrn});
+            primaryIFile.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        for(auto i: primaryI)
+        {
+            primaryIFile << i.first << '|';
+            primaryIFile << i.second << '\n';
+        }
+    }
+    primaryIFile.close();
+}
+
+int SLS::updateBookFileHeader(bool flag) {
+    if(flag )                                // addition
+    {
+        ifstream bookfile("Books.txt");
+        int size = 0;
+        string firstIntegerStr;
+
+        // Read the first string until the "|" delimiter
+        if (getline(bookfile, firstIntegerStr, '|')) {
+            // Convert the string to an integer
+            int firstInteger = stoi(firstIntegerStr);
+
+            // Print or process the first integer
+            std::cout << "First Integer: " << firstInteger << std::endl;
+            size = firstInteger;
+        }
+        size++;
+        firstIntegerStr = to_string(size);
+        bookFile.seekp(0);
+        bookFile.write((char*)&firstIntegerStr,);
+        return size;
+    }
+
+}
+
