@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include "bits-stdc++.h"
 // if you're working on VS code comment #include "SLS.h" and uncomment #include "SLS.cpp"
 // if you're working on Clion comment #include "SLS.cpp" and uncomment #include "SLS.h"
 //#include "SLS.cpp"

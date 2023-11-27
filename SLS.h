@@ -8,7 +8,11 @@
 #define SLS_H
 
 using namespace std;
-
+int recsize = 0;
+void insertAuthorIndex(int recsize , char*id);
+int binarySearch(const vector<int>& iDs, int id);
+vector<int> authorIds;
+vector<int> AuthorByteOffset;
 struct Author
 {
     char ID[15];

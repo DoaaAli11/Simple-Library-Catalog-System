@@ -4,11 +4,39 @@
 
 // declarations of the structs' and SLS class's functions
 
-#include <bits/stdc++.h>
+#include "bits-stdc++.h"
 #include "SLS.h"
 
 using namespace std;
+void insertAuthorIndex(int recsize , char*id)
+{
+    fstream pIndex = fstream("pIndex.txt" , ios::app);
+    pIndex.write((char*)id , strlen(id));
+    pIndex << " ";
+    pIndex << recsize;
+    pIndex << "\n";
+}
+int binarySearch(const vector<int>& iDs, int id) {
+    int left = 0;
+    int right = iDs.size() - 1;
 
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (iDs[mid] == id) {
+            return mid;
+        }
+
+        if (iDs[mid] < id) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+
+    return -1;
+}
 Author::Author() {}
 
 Author::Author(char id[15], char n[30], char add[30])
@@ -62,6 +90,21 @@ SLS::~SLS() {
 
 void SLS::addAuthor()
 {
+    int check = binarySearch(authorIds , stoi(author.ID));
+    if( check != -1)
+    {
+        return;
+    }
+    authorFile.open("file.txt" , ios::app);
+    authorFile.write((char*)author.ID , strlen(author.ID));
+    authorFile << '|';
+    authorFile.write((char *) author.name , strlen(author.name));
+    authorFile << '|';
+    authorFile.write((char *) author.address , strlen(author.address));
+    authorFile << "\n";
+    insertAuthorIndex(recsize , author.ID);
+    recsize+=strlen(author.ID) + strlen(author.name) + strlen(author.address) + 3;
+    authorFile.close();
 }
 
 void SLS::addBook()
@@ -211,7 +254,7 @@ int SLS::updateBookFileHeader(bool flag) {
         size++;
         firstIntegerStr = to_string(size);
         bookFile.seekp(0);
-        bookFile.write((char*)&firstIntegerStr,);
+//        bookFile.write((char*)&firstIntegerStr,);
         return size;
     }
 
