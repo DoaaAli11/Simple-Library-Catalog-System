@@ -8,11 +8,6 @@
 #define SLS_H
 
 using namespace std;
-int recsize = 0;
-void insertAuthorIndex(int recsize , char*id);
-int binarySearch(const vector<int>& iDs, int id);
-vector<int> authorIds;
-vector<int> AuthorByteOffset;
 struct Author
 {
     char ID[15];
@@ -43,15 +38,20 @@ private:
     fstream bookFile;
     fstream pISBNFile;
     int curRecord;
+    int recsize = 0;
+    vector<int> authorIds;
+    vector<int> AuthorByteOffset;
+    vector<int> bookISBN;
 
     //
     // add your own index files as you need
     //
 
     // main file's functions
-    void updateISBNIndex(char* isbn, int recSize, bool flag);
-//    void readFromFile(fstream& file);
-//    static void writeToFile(fstream& file,const char ojc[]);
+    void updateISBNIndex(char *isbn, int recSize, bool flag);
+    void insertAuthorIndex(int recsize, char *id);
+    int binarySearch(const vector<int> &iDs, int id);
+    void loadBookIndex();
 
     //
     // add your own index functions and any other functions as you need
