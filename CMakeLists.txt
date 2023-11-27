@@ -8,4 +8,6 @@ include_directories(.)
 add_executable(Simple_Library_Catalog_System
         main.cpp
         SLS.cpp
-        SLS.h)
+        SLS.h
+        bits-stdc++.h
+        )
