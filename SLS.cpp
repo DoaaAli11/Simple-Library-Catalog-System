@@ -51,15 +51,6 @@ SLS::SLS(Author a, Book b)
 SLS::~SLS() {
 }
 
-//void SLS::readFromFile(fstream& file)
-//{
-//}
-//
-//void SLS::writeToFile(fstream& file,const char ojc[])
-//{
-//    file.write(ojc,sizeof(ojc));
-//}
-
 void SLS::addAuthor()
 {
 }
@@ -67,44 +58,21 @@ void SLS::addAuthor()
 void SLS::addBook()
 {
     bookFile.open("Books.txt", ios::out | ios:: binary | ios::app | ios::in);
-    // Check if the file is open
-    if (!bookFile.is_open()) {
-        cout << "Error opening file\n";
-        return;
-    }
 
-//    if (bookFile.peek() == EOF)
+//    int check = binarySearch(authorIds , stoi(author.ID));
+//    if( check != -1)
 //    {
-//        char* size = "0";
-//        char* AVAIL = "-1";
-//        bookFile.write(size,sizeof (size));
-//        bookFile << "|";
-//        bookFile.write(AVAIL,sizeof (AVAIL));
-//        bookFile << "\n";
-//
+//        return;
 //    }
-
-    char isbn[15], t[30], aid[15];
-    cin.ignore();
-    cout << "Enter book's ISBN:";
-    cin >> isbn;
-    cout << "Enter book's title:";
-    cin >> t;
-    cout << "Enter book's author's ID:";
-    cin >> aid;
-
-    this->book = Book(isbn, t, aid);
-
-    // Write data as binary structure
-    bookFile.seekp(0, ios::end);
-    bookFile.write((char*)(&book), sizeof(book));
-
-
-    int newSize = updateBookFileHeader(true);
-    updateISBNIndex(book.ISBN, newSize, true);
-    cout << "\nBook added successfully.\n\n";
-
-    // Flush and close the file
+    bookFile.open("Book.txt" , ios::app);
+    bookFile.write((char*)book.ISBN , strlen(book.ISBN));
+    bookFile << '|';
+    bookFile.write((char *) book.title , strlen(book.title));
+    bookFile << '|';
+    bookFile.write((char *) book.authorID , strlen(book.authorID));
+    bookFile << "\n";
+    updateISBNIndex(author.ID, curRecord, true);
+    curRecord+=strlen(author.ID) + strlen(author.name) + strlen(author.address) + 3;
     bookFile.flush();
     bookFile.close();
 }
@@ -158,62 +126,12 @@ void SLS::query()
 {
 }
 
-void SLS::updateISBNIndex(char isbn[15], int rrn, bool flag) {
-    map<char*, int> primaryI;
-
-    primaryIFile.open("ISBNIndex.txt", ios::app | ios::in);
-    primaryIFile.seekg (0,ios::end);
-    long long size = primaryIFile.tellg();
-    primaryIFile.seekg(0);
-
-    int n = size / 18;
-    if(flag)                    //addition
-    {
-        if(primaryIFile.eof())
-        {
-            primaryIFile << isbn << '|';
-            primaryIFile << rrn << '\n';
-            return;
-        }
-        primaryI.insert({isbn, rrn});
-
-        for(int i = 0; i < n; i++) {
-            primaryIFile.read(isbn,'|');
-            primaryIFile >> rrn;
-            primaryI.insert({isbn, rrn});
-            primaryIFile.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-        for(auto i: primaryI)
-        {
-            primaryIFile << i.first << '|';
-            primaryIFile << i.second << '\n';
-        }
-    }
-    primaryIFile.close();
+void SLS::updateISBNIndex(char* isbn, int recSize, bool flag) {
+    pISBNFile = fstream("pIndex.txt" , ios::app);
+    pISBNFile.write((char*)isbn, strlen(isbn));
+    pISBNFile << " ";
+    pISBNFile << recSize;
+    pISBNFile << "\n";
 }
 
-int SLS::updateBookFileHeader(bool flag) {
-    if(flag )                                // addition
-    {
-        ifstream bookfile("Books.txt");
-        int size = 0;
-        string firstIntegerStr;
-
-        // Read the first string until the "|" delimiter
-        if (getline(bookfile, firstIntegerStr, '|')) {
-            // Convert the string to an integer
-            int firstInteger = stoi(firstIntegerStr);
-
-            // Print or process the first integer
-            std::cout << "First Integer: " << firstInteger << std::endl;
-            size = firstInteger;
-        }
-        size++;
-        firstIntegerStr = to_string(size);
-        bookFile.seekp(0);
-        bookFile.write((char*)&firstIntegerStr,);
-        return size;
-    }
-
-}
 
