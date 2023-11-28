@@ -37,11 +37,12 @@ private:
     fstream authorFile;
     fstream bookFile;
     fstream pISBNFile;
-    int curRecord;
-    int recsize = 0;
+    int curRecordSize = 0;
+    int curByteOffset = 0;
     vector<int> authorIds;
     vector<int> AuthorByteOffset;
-    vector<int> bookISBN;
+    vector<string> bookISBN;
+    map<string, int> bookIsbnMap;
 
     //
     // add your own index files as you need
@@ -50,8 +51,12 @@ private:
     // main file's functions
     void updateISBNIndex(char *isbn, int recSize, bool flag);
     void insertAuthorIndex(int recsize, char *id);
-    int binarySearch(const vector<int> &iDs, int id);
+    int binarySearch(const vector<string> &iDs, string id);
     void loadBookIndex();
+    int getNewByteOffset();
+    void updateBookAVAIL(int beforeTarget, int target, bool flag);
+
+    // void insertSortedPrimaryIndex(char id[], short offset); // insert sorted in the primary index
 
     //
     // add your own index functions and any other functions as you need
