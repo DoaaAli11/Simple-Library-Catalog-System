@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.21"
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Simple_Library_Catalog_System::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Simple_Library_Catalog_System-Debug-7ca33adc1be86b904444.json",
+					"jsonFile" : "target-Simple_Library_Catalog_System-Debug-4bf463dbbd41041285f6.json",
 					"name" : "Simple_Library_Catalog_System",
 					"projectIndex" : 0
 				}
@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/omarosama/CLionProjects/Simple-Library-Catalog-System/cmake-build-debug",
-		"source" : "/Users/omarosama/CLionProjects/Simple-Library-Catalog-System"
+		"build" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug",
+		"source" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 3
 	}
 }

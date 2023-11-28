@@ -160,6 +160,7 @@ void SLS::addAuthor()
 
 int SLS::getNewByteOffset()
 {
+//    get new byte offset
     short AVAIL;
     short oldSizeRec, nextByteoffsetAVAIL;
 

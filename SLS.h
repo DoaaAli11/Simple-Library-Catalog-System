@@ -56,8 +56,6 @@ private:
     int getNewByteOffset();
     void updateBookAVAIL(int beforeTarget, int target, bool flag);
 
-    // void insertSortedPrimaryIndex(char id[], short offset); // insert sorted in the primary index
-
     //
     // add your own index functions and any other functions as you need
     //

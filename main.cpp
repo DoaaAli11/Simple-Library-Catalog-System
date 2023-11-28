@@ -1,8 +1,8 @@
 #include "bits-stdc++.h"
 // if you're working on VS code comment #include "SLS.h" and uncomment #include "SLS.cpp"
 // if you're working on Clion comment #include "SLS.cpp" and uncomment #include "SLS.h"
-//#include "SLS.cpp"
-#include "SLS.h"
+#include "SLS.cpp"
+// #include "SLS.h"
 
 using namespace std;
 
@@ -10,7 +10,7 @@ int main()
 {
     SLS system;
     int choice = 1;
-    cout<<"Welcome to our simple library system :)\n\n";
+    cout << "Welcome to our simple library system :)\n\n";
     while (choice != 0)
     {
         cout << "1 - Add New Author\n"
@@ -57,12 +57,12 @@ int main()
         case 0:
             break;
         default:
-            cout<<"\nWrong input!\nTry again.\n\n";
+            cout << "\nWrong input!\nTry again.\n\n";
             break;
         }
     }
 
-    cout<<"\nThanks for using our system :)\n";
+    cout << "\nThanks for using our system :)\n";
 
     return 0;
 }

@@ -1,3 +1,3 @@
-/Users/omarosama/CLionProjects/Simple-Library-Catalog-System/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir
-/Users/omarosama/CLionProjects/Simple-Library-Catalog-System/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/omarosama/CLionProjects/Simple-Library-Catalog-System/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug/CMakeFiles/Simple_Library_Catalog_System.dir
+F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/cmake-build-debug/CMakeFiles/edit_cache.dir

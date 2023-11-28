@@ -1,7 +1,5 @@
 # ninja log v5
 15733	17336	7225678074919236	Simple_Library_Catalog_System.exe	fabd9caf6baf17b
 15428	16379	7213601610254135	SLS.exe	826659039ef0e0a7
-0	53	1701107297327224841	build.ninja	68a593f3f185a259
-0	614	1701107455962583219	CMakeFiles/Simple_Library_Catalog_System.dir/main.cpp.o	78cf50f9652c9b48
-0	658	1701107456007450127	CMakeFiles/Simple_Library_Catalog_System.dir/SLS.cpp.o	e699e12c86e47f1e
+0	53	7228166732737943	build.ninja	68a593f3f185a259
 658	822	1701107456170829139	Simple_Library_Catalog_System	2515c240c922416f

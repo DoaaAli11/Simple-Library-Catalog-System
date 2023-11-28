@@ -2,7 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Simple_Library_Catalog_System"
+			"path" : "Simple_Library_Catalog_System.exe"
+		},
+		{
+			"path" : "Simple_Library_Catalog_System.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -42,7 +45,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk -fcolor-diagnostics"
+					"fragment" : "-g"
 				},
 				{
 					"fragment" : "-std=gnu++14"
@@ -52,7 +55,7 @@
 			[
 				{
 					"backtrace" : 2,
-					"path" : "/Users/omarosama/CLionProjects/Simple-Library-Catalog-System/."
+					"path" : "F:/Academic_Years/3-Third_Year/1st/files/assignments/a1/SLS/Simple-Library-Catalog-System/."
 				}
 			],
 			"language" : "CXX",
@@ -83,12 +86,16 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
 	"name" : "Simple_Library_Catalog_System",
-	"nameOnDisk" : "Simple_Library_Catalog_System",
+	"nameOnDisk" : "Simple_Library_Catalog_System.exe",
 	"paths" : 
 	{
 		"build" : ".",
