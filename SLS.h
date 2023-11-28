@@ -38,7 +38,7 @@ private:
     fstream bookFile;
     fstream pISBNFile;
     int curRecordSize = 0;
-    int curByteOffset = 0;
+    short curByteOffset = 0;
     vector<int> authorIds;
     vector<int> AuthorByteOffset;
     vector<string> bookISBN;

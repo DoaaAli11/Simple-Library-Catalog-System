@@ -115,6 +115,12 @@ Book::Book(char isbn[15], char t[30], char aID[15])
 
 SLS::SLS()
 {
+    bookFile.open("Book.txt", ios:: app);
+    bookFile.seekg(0, ios::end);
+    int tell = bookFile.tellg();
+    if(tell == 0)
+        bookFile << "-1\n";
+    bookFile.close();
 }
 
 SLS::SLS(Author a)
@@ -164,55 +170,49 @@ int SLS::getNewByteOffset()
     short AVAIL;
     short oldSizeRec, nextByteoffsetAVAIL;
 
-    if (bookFile.peek() == EOF)
+    bookFile.seekg(0, ios::beg);
+    short target;
+    bookFile >> target;
+    bookFile.seekg(0, ios::end);
+    streampos byteOffset = bookFile.tellg();
+    curByteOffset = byteOffset;
+    if (target == -1)
     {
-        AVAIL = -1;
-        bookFile << AVAIL << "\n";
+        return curByteOffset;
     }
     else
     {
-        short target;
-        bookFile >> target;
-        if (target == -1)
+        bookFile.seekg(target, ios::beg);
+        bookFile.ignore('*');
+        bookFile >> oldSizeRec;
+        bookFile.ignore('|');
+        bookFile >> nextByteoffsetAVAIL;
+
+        int previouseByteOffset = 0;
+        while (true)
         {
-            bookFile.seekg(0, ios::end);
-            streampos byteOffset = bookFile.tellg();
-            curByteOffset = byteOffset;
-            return -1;
-        }
-        else
-        {
-            bookFile.seekg(target, ios::beg);
+
+            if (curRecordSize <= oldSizeRec)
+            {
+                bookFile.seekp(target, ios::beg);
+                updateBookAVAIL(previouseByteOffset, nextByteoffsetAVAIL, true);
+                return target;
+            }
+            else if (nextByteoffsetAVAIL == -1)
+            {
+                updateBookAVAIL(previouseByteOffset, nextByteoffsetAVAIL, true);
+                return curByteOffset;
+            }
+            bookFile.seekg(nextByteoffsetAVAIL, ios::beg);
+            previouseByteOffset = target;
+            target = nextByteoffsetAVAIL;
             bookFile.ignore('*');
             bookFile >> oldSizeRec;
             bookFile.ignore('|');
             bookFile >> nextByteoffsetAVAIL;
-
-            int previouseByteOffset = 0;
-            while (true)
-            {
-
-                if (curRecordSize <= oldSizeRec)
-                {
-                    bookFile.seekp(target, ios::beg);
-                    updateBookAVAIL(previouseByteOffset, nextByteoffsetAVAIL, true);
-                    return target;
-                }
-                else if (nextByteoffsetAVAIL == -1)
-                {
-                    updateBookAVAIL(previouseByteOffset, nextByteoffsetAVAIL, true);
-                    return -1;
-                }
-                bookFile.seekg(nextByteoffsetAVAIL, ios::beg);
-                previouseByteOffset = target;
-                target = nextByteoffsetAVAIL;
-                bookFile.ignore('*');
-                bookFile >> oldSizeRec;
-                bookFile.ignore('|');
-                bookFile >> nextByteoffsetAVAIL;
-            }
         }
     }
+
 }
 
 void SLS::addBook()
@@ -251,7 +251,7 @@ void SLS::addBook()
     streampos byteOffset = bookFile.tellg();
     curByteOffset = getNewByteOffset();
 
-    if (curByteOffset != -1)
+    if (curByteOffset != byteOffset)
     {
 
         ostringstream concatenatedInput;
@@ -277,7 +277,6 @@ void SLS::addBook()
     }
     else
     {
-
         bookFile << std::setw(2) << std::setfill('0') << curRecordSize;
         bookFile << '|';
         bookFile.write((char *)book.ISBN, strlen(book.ISBN));
