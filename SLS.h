@@ -1,21 +1,19 @@
-//
-// Created by Doaa Ali on ١٠/١١/٢٠٢٣.
-//
-
-// Main system's structure, may change according to requirements
-
-#ifndef SLS_H
-#define SLS_H
+#include <vector>
+#include <map>
 
 using namespace std;
-
+extern vector<int> authorIds;
+extern map<int,long> indexing;
+int recsize=0;
+void insertAuthorIndex(int recsize , char*id);
+int binarySearch(const vector<int>& iDs, int id);
 struct Author
 {
     char ID[15];
     char name[30];
     char address[30];
     Author();
-    Author(char id[15], char n[30], char add[30]);
+    Author(string id, string n, string add);
 };
 
 struct Book
@@ -62,15 +60,15 @@ public:
     ~SLS();
 
     // main system's function that the user will use
-    void addAuthor();
+    void addAuthor(Author A);
     void addBook();
     void updateAuthorName();
     void updateBookTitle();
-    void deleteAuthor();
+    void deleteAuthor(Author A);
     void deleteBook();
     void printAuthor();
     void printBook();
     void query();
 };
 
-#endif // SLS_H
+#endif //LASTTEST_SLS_H
