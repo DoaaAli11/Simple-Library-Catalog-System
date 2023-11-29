@@ -4,7 +4,7 @@
 using namespace std;
 extern vector<int> authorIds;
 extern map<int,long> indexing;
-int recsize=0;
+//int recsize=0;
 void insertAuthorIndex(int recsize , char*id);
 int binarySearch(const vector<int>& iDs, int id);
 struct Author
@@ -66,7 +66,7 @@ public:
     void updateBookTitle();
     void deleteAuthor(Author A);
     void deleteBook();
-    void printAuthor();
+    void Search_By_Primary(int ID);
     void printBook();
     void query();
 };
