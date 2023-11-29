@@ -1,24 +1,61 @@
-//
-// Created by Doaa Ali on ١٠/١١/٢٠٢٣.
+
+// Created by Esraa Mahmoud on 29/11/2023.
 //
 
 // declarations of the structs' and SLS class's functions
 
-#include <bits/stdc++.h>
+//#include "bits-stdc++.h"
 #include "SLS.h"
+#include <cstring>
+#include <iostream>
+#include <map>
+#include <limits>
+#include <sstream>
+vector<int> authorIds;
+map<int,long> indexing;
 
 using namespace std;
 
+void insertAuthorIndex(int recsize , char*id)
+{
+    fstream pIndex = fstream("pIndex.txt" , ios::app);
+    pIndex.write((char*)id , strlen(id));
+    pIndex << " ";
+    pIndex << recsize;
+    pIndex << "\n";
+}
+int binarySearch(const vector<int>& iDs, int id) {
+    int left = 0;
+    int right = iDs.size() - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (iDs[mid] == id) {
+            return mid;
+        }
+
+        if (iDs[mid] < id) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+
+    return -1;
+}
 Author::Author() {}
 
-Author::Author(char id[15], char n[30], char add[30])
+
+Author::Author(string id, string n, string add)
 {
 //    used strcpy to copy the char arrays
-    strcpy(this->ID, id);
-    strcpy(this->name, n);
-    strcpy(this->address, add);
-}
+    strcpy(this->ID , id.c_str());
+    strcpy(this->name , n.c_str());
+    strcpy(this->address , add.c_str());
 
+}
 Book::Book() {}
 
 Book::Book(char isbn[15], char t[30], char aID[15])
@@ -59,11 +96,86 @@ SLS::~SLS() {
 //{
 //    file.write(ojc,sizeof(ojc));
 //}
-
-void SLS::addAuthor()
+void store_Index_In_Map()
 {
-}
+    fstream pIndex = fstream("pIndex.txt" , ios::in);
+    string line;
+    while (std::getline(pIndex, line)) {
+        istringstream is(line);
+        int id;
+        long byteOffset;
 
+        if (is >> id >> byteOffset) {
+            indexing[id] = byteOffset;
+        } else {
+            std::cout << "Error parsing line: " << line << std::endl;
+        }
+    }
+    pIndex.close();
+    cout<<"Done\n";
+}
+void retrieve_into_index()
+{
+    fstream pIndex = fstream("pIndex.txt" , ios::out);
+    for (const auto& pair : indexing) {
+        pIndex << pair.first << " " << pair.second << std::endl;
+    }
+    cout<<"Done\n";
+
+}
+void SLS::deleteAuthor(Author A)
+{
+    //store index into Map
+    store_Index_In_Map();
+    auto check = indexing.find(stoi(A.ID));
+    if (check != indexing.end())
+    {
+        char List[10];
+        ///get size of record
+        int size=strlen(A.ID) + strlen(A.name) + strlen(A.address);
+        ////get Avail List
+        authorFile.open("file.txt" , ios::in);
+        authorFile.getline(List,sizeof (List));
+        authorFile.close();
+
+        ////get byte offset of deleted record
+        long ByteOffset=indexing[stoi(A.ID)];
+        authorFile.open("file.txt", std::ios::in | std::ios::out);
+        authorFile.seekp(ios::beg);
+        authorFile<<ByteOffset;
+        authorFile.seekp(ByteOffset,ios::beg);
+        ///insert size and pre deleted
+        authorFile<<"*"<<List<<"|"<<size;
+        authorFile.close();
+        auto it = indexing.find(stoi(A.ID));
+        indexing.erase(it);
+        retrieve_into_index();
+        cout<<"Done\n";
+
+    }
+    else
+        cout<<"This author doesn't exist\n";
+}
+void SLS::addAuthor(Author auhor)
+{
+    cout << auhor.ID << " |" << auhor.name;
+    string id = string(auhor.ID);
+    int check = binarySearch(authorIds , stoi(id));
+    if( check != -1)
+    {
+        return;
+    }
+    authorFile.open("file.txt" , ios::app);
+    authorFile.write((char*)author.ID , strlen(author.ID));
+    authorFile << '|';
+    authorFile.write((char *) author.name , strlen(author.name));
+    authorFile << '|';
+    authorFile.write((char *) author.address , strlen(author.address));
+    authorFile << "\n";
+    insertAuthorIndex(recsize , author.ID);
+    recsize+=strlen(author.ID) + strlen(author.name) + strlen(author.address) + 3;
+    authorFile.close();
+}
 void SLS::addBook()
 {
     bookFile.open("Books.txt", ios::out | ios:: binary | ios::app | ios::in);
@@ -114,10 +226,6 @@ void SLS::updateAuthorName()
 }
 
 void SLS::updateBookTitle()
-{
-}
-
-void SLS::deleteAuthor()
 {
 }
 
@@ -211,7 +319,7 @@ int SLS::updateBookFileHeader(bool flag) {
         size++;
         firstIntegerStr = to_string(size);
         bookFile.seekp(0);
-        bookFile.write((char*)&firstIntegerStr,);
+//        bookFile.write((char*)&firstIntegerStr,);
         return size;
     }
 
