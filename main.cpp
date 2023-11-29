@@ -17,9 +17,9 @@ int main()
                 "2 - Add New Book\n"
                 "3 - Update Author Name(Author ID)\n"
                 "4 - Update Book Title(ISBN)\n"
-                "5 - Delete Author(Author ID)\n"
+                "5 - Delete Author\n"
                 "6 - Delete Book(ISBN)\n"
-                "7 - Print Author(Author ID)\n"
+                "7 - Search for Author\n"
                 "8 - Print Book(ISBN)\n"
                 "9 - Write Query\n"
                 "0 - Exit\n\n";
@@ -45,9 +45,12 @@ int main()
 //        case 6:
 //            system.deleteBook();
 //            break;
-//        case 7:
-//            system.printAuthor();
-//            break;
+        case 7:
+            int ID;
+            cout<<"Enter ID of Author.. \n";
+            cin>>ID;
+            system.Search_By_Primary(ID);
+            break;
 //        case 8:
 //            system.printBook();
 //            break;
