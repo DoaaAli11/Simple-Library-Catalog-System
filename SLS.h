@@ -64,7 +64,7 @@ public:
     void addBook();
     void updateAuthorName();
     void updateBookTitle();
-    void deleteAuthor(Author A);
+    void deleteAuthor(int Id);
     void deleteBook();
     void Search_By_Primary(int ID);
     void printBook();
