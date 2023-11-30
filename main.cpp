@@ -1,8 +1,8 @@
 #include "bits-stdc++.h"
 // if you're working on VS code comment #include "SLS.h" and uncomment #include "SLS.cpp"
 // if you're working on Clion comment #include "SLS.cpp" and uncomment #include "SLS.h"
-#include "SLS.cpp"
-// #include "SLS.h"
+//#include "SLS.cpp"
+ #include "SLS.h"
 
 using namespace std;
 
@@ -17,8 +17,8 @@ int main()
                 "2 - Add New Book\n"
                 "3 - Update Author Name(Author ID)\n"
                 "4 - Update Book Title(ISBN)\n"
-                "5 - Delete Book(ISBN)\n"
-                "6 - Delete Author(Author ID)\n"
+                "5 - Delete Author(Author ID)\n"
+                "6 - Delete Book (ISBN)\n"
                 "7 - Print Author(Author ID)\n"
                 "8 - Print Book(ISBN)\n"
                 "9 - Write Query\n"

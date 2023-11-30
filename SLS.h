@@ -37,12 +37,16 @@ private:
     fstream authorFile;
     fstream bookFile;
     fstream pISBNFile;
+    fstream sAuthorIDFile;
+    fstream sAuthorIDListFile;
     int curRecordSize = 0;
     short curByteOffset = 0;
     vector<int> authorIds;
     vector<int> AuthorByteOffset;
     vector<string> bookISBN;
+    vector<string> secAuthorIds;
     map<string, int> bookIsbnMap;
+    map<string, int> secAuthorMap;
 
     //
     // add your own index files as you need
@@ -55,7 +59,8 @@ private:
     void loadBookIndex();
     int getNewByteOffset();
     void updateBookAVAIL(int beforeTarget, int target, bool flag);
-
+    void updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag);
+    void loadAuthorSecIndex();
     //
     // add your own index functions and any other functions as you need
     //
