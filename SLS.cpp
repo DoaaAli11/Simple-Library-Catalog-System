@@ -139,10 +139,11 @@ void SLS::deleteAuthor(Author A)
         authorFile.close();
 
         ////get byte offset of deleted record
-        long ByteOffset=indexing[stoi(A.ID)];
+        int ByteOffset=indexing[stoi(A.ID)];
+        string Byte=to_string(ByteOffset);
         authorFile.open("file.txt", std::ios::in | std::ios::out);
         authorFile.seekp(ios::beg);
-        authorFile<<ByteOffset;
+        authorFile.write(Byte.c_str(),3);
         authorFile.seekp(ByteOffset,ios::beg);
         ///insert size and pre deleted
         authorFile<<"*"<<List<<"|"<<size;
