@@ -45,6 +45,7 @@ private:
     vector<int> AuthorByteOffset;
     vector<string> bookISBN;
     vector<string> secAuthorIds;
+    vector<pair<string, int>> secIsbnList;
     map<string, int> bookIsbnMap;
     map<string, int> secAuthorMap;
 
@@ -61,6 +62,7 @@ private:
     void updateBookAVAIL(int beforeTarget, int target, bool flag);
     void updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag);
     void loadAuthorSecIndex();
+    void loadIsbnSecList();
     //
     // add your own index functions and any other functions as you need
     //
