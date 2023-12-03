@@ -63,6 +63,8 @@ private:
     void updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag);
     void loadAuthorSecIndex();
     void loadIsbnSecList();
+    Book searchBook(string isbn);
+
     //
     // add your own index functions and any other functions as you need
     //

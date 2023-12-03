@@ -21,11 +21,12 @@ void SLS::insertAuthorIndex(int recsize, char *id)
 void SLS::updateISBNIndex(char *isbn, int recByteOffset, bool flag)
 {
     pISBNFile.open("ISBNIndex.txt", ios::out);
-    if(flag)
+    if (flag)
     {
         bookIsbnMap.insert({isbn, recByteOffset});
     }
-    else {
+    else
+    {
         bookIsbnMap.erase(isbn);
     }
     for (auto i : bookIsbnMap)
@@ -34,7 +35,6 @@ void SLS::updateISBNIndex(char *isbn, int recByteOffset, bool flag)
     }
 
     pISBNFile.close();
-
 }
 
 int SLS::binarySearch(const vector<string> &iDs, string id)
@@ -78,6 +78,9 @@ void SLS::loadBookIndex()
     string isbn; // Assuming each name is at most 15 characters long
     int rrn;
 
+    bookIsbnMap.clear();
+    bookISBN.clear();
+
     while (!pISBNFile.eof())
     {
         pISBNFile >> isbn;
@@ -95,11 +98,11 @@ void SLS::loadBookIndex()
 
 void SLS::updateBookAVAIL(int beforeTarget, int target, bool flag)
 {
-    bookFile.open("Book.txt",ios::in| ios::out);
+    bookFile.open("Book.txt", ios::in | ios::out);
     if (flag)
     {
         short temp;
-        if(beforeTarget == 0)
+        if (beforeTarget == 0)
         {
             bookFile.seekp(beforeTarget);
             bookFile << target << '|';
@@ -108,7 +111,7 @@ void SLS::updateBookAVAIL(int beforeTarget, int target, bool flag)
         {
             bookFile.seekg(beforeTarget + 1, ios::beg);
             bookFile >> temp;
-            bookFile.seekp(beforeTarget + 1 + sizeof (temp));
+            bookFile.seekp(beforeTarget + 1 + sizeof(temp));
             bookFile << target;
         }
         bookFile.close();
@@ -119,12 +122,12 @@ void SLS::updateBookAVAIL(int beforeTarget, int target, bool flag)
     getline(bookFile, header, '|');
     string recSize;
     bookFile.seekg(target);
-    getline(bookFile, recSize ,'|');
+    getline(bookFile, recSize, '|');
 
     bookFile.seekp(target);
     bookFile << '*' << recSize << '|' << header << '|';
 
-    bookFile.seekp(0,ios::beg);
+    bookFile.seekp(0, ios::beg);
     bookFile << target << '|';
 
     bookFile.close();
@@ -151,11 +154,12 @@ Book::Book(char isbn[15], char t[30], char aID[15])
 
 SLS::SLS()
 {
-    bookFile.open("Book.txt", ios:: app);
+    bookFile.open("Book.txt", ios::app);
     bookFile.seekg(0, ios::end);
     int tell = bookFile.tellg();
-    if(tell == 0) {
-        bookFile << "-1|--\n";
+    if (tell == 0)
+    {
+        bookFile << "-1|---\n";
     }
     bookFile.close();
 }
@@ -203,12 +207,12 @@ void SLS::addAuthor()
 
 int SLS::getNewByteOffset()
 {
-//    get new byte offset
+    //    get new byte offset
     short AVAIL;
     string oldSizeRec, nextByteoffsetAVAIL;
 
     bookFile.seekg(0, ios::beg);
-    short target;
+    int target;
     bookFile >> target;
     bookFile.seekg(0, ios::end);
     streampos byteOffset = bookFile.tellg();
@@ -220,8 +224,8 @@ int SLS::getNewByteOffset()
     else
     {
         bookFile.seekg(target + 1, ios::beg);
-        getline(bookFile, oldSizeRec,'|');
-        getline(bookFile, nextByteoffsetAVAIL,'|');
+        getline(bookFile, oldSizeRec, '|');
+        getline(bookFile, nextByteoffsetAVAIL, '|');
 
         int previouseByteOffset = 0;
         while (true)
@@ -239,11 +243,10 @@ int SLS::getNewByteOffset()
             bookFile.seekg(stoi(nextByteoffsetAVAIL) + 1, ios::beg);
             previouseByteOffset = target;
             target = stoi(nextByteoffsetAVAIL);
-            getline(bookFile, oldSizeRec,'|');
-            getline(bookFile, nextByteoffsetAVAIL,'|');
+            getline(bookFile, oldSizeRec, '|');
+            getline(bookFile, nextByteoffsetAVAIL, '|');
         }
     }
-
 }
 
 void SLS::addBook()
@@ -326,14 +329,15 @@ void SLS::addBook()
 
     // insertSortedPrimaryIndex(book.ISBN, curByteOffset);
     updateISBNIndex(book.ISBN, curByteOffset, true);
-    updateSecondaryAuthorIDFile(book.authorID, book.ISBN,true);
+    updateSecondaryAuthorIDFile(book.authorID, book.ISBN, true);
     bookFile.flush();
     bookFile.close();
 }
+
 void SLS::loadIsbnSecList()
 {
     secIsbnList.clear();
-    sAuthorIDListFile.open("secIsbnList.txt",ios::in | ios::app);
+    sAuthorIDListFile.open("secIsbnList.txt", ios::in | ios::app);
     while (!sAuthorIDListFile.fail())
     {
         // Read and extract key and integer value from the 5th line
@@ -365,58 +369,98 @@ void SLS::loadIsbnSecList()
 
     sAuthorIDListFile.close();
 }
+
 void SLS::updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag)
 {
-    //map for all author ids in the file before insertion
-    //add isbn to its list and link its byte offset to author id or to the previous isbn
+    // map for all author ids in the file before insertion
+    // add isbn to its list and link its byte offset to author id or to the previous isbn
     loadAuthorSecIndex();
     loadIsbnSecList();
-    sAuthorIDFile.open("secondaryAuthorID.txt",ios::in | ios::app);
 
-    sAuthorIDListFile.open("secIsbnList.txt", ios::in | ios::app);
-    if(flag)
+    if (flag)
     {
-        sAuthorIDListFile.seekg(0,ios::end);
         int lineNum = secIsbnList.size();
 
-        if(binarySearch(secAuthorIds, authorID) == -1)
+        if (binarySearch(secAuthorIds, authorID) == -1)
         {
             secAuthorMap.insert({authorID, lineNum});
-            sAuthorIDListFile << isbn << ' ' << "-1" << '\n';
+            // sAuthorIDListFile << isbn << ' ' << "-1" << '\n';
+            secIsbnList.push_back({isbn, -1});
         }
         else
         {
             lineNum = secAuthorMap[authorID];
-            sAuthorIDListFile << isbn << ' ' << lineNum << '\n';
+            // sAuthorIDListFile << isbn << ' ' << lineNum << '\n';
             secAuthorMap[authorID] = secIsbnList.size();
+            secIsbnList.push_back({isbn, lineNum});
         }
+    }
+    else
+    {
+        int check = binarySearch(secAuthorIds, authorID);
+        if (check == -1)
+        {
+            cout << "WARNING: unknown author id " << authorID << endl;
+            return;
+        }
+        else
+        {
+            cout << "Start deleting from linked list" << endl;
+            int isbnBindingIndex = secAuthorMap[authorID];
+            string desiredIsbn = secIsbnList[isbnBindingIndex].first;
+            int nextIsbnIndex = secIsbnList[isbnBindingIndex].second;
+            // case 1
+            //  value of author id in map = index && index refers to the required isbn
+            //  then take the value from the isbn list item and put it in the secondaryAuthorFile and replace it with #
+            if (desiredIsbn == isbn)
+            {
+                secAuthorMap[authorID] = nextIsbnIndex;
+                secIsbnList[isbnBindingIndex].second = -2;
+            }
+            //  case 2
+            //  loop on the linked list items
+            //  keep the value of the previous index
+            //  when isbn found replace the previous index's value to this value and replace this value with #
+            else
+            {
+                int tmp = isbnBindingIndex;
+                while (true)
+                {
+                    desiredIsbn = secIsbnList[nextIsbnIndex].first;
+                    if (desiredIsbn == isbn)
+                    {
+                        secIsbnList[tmp].second = secIsbnList[nextIsbnIndex].second;
+                        secIsbnList[nextIsbnIndex].second = -2;
+                        break;
+                    }
+                    tmp = nextIsbnIndex;
+                    nextIsbnIndex = secIsbnList[nextIsbnIndex].second;
+                }
+            }
+        }
+    }
 
-    }
-    else{
-        //case 1
-        // value of author id in map = index && index refers to the required isbn
-        // then take the value from the isbn list item and put it in the secondaryAuthorFile and replace it with #
-        // case 2
-        // loop on the linked list items
-        // keep the value of the previous index
-        // when isbn found replace the previous index's value to this value and replace this value with #
-    }
-    sAuthorIDFile.close();
     sAuthorIDFile.open("secondaryAuthorID.txt", ios::out);
     for (auto i : secAuthorMap)
     {
         sAuthorIDFile << i.first << " " << i.second << "\n";
     }
-
     sAuthorIDFile.close();
+
+    sAuthorIDListFile.open("secIsbnList.txt", ios::out);
+    for (auto i : secIsbnList)
+    {
+        sAuthorIDListFile << i.first << " " << i.second << "\n";
+    }
     sAuthorIDListFile.close();
 }
+
 void SLS::loadAuthorSecIndex()
 {
-    sAuthorIDFile.open("secondaryAuthorID.txt", ios::in| ios::app);
+    sAuthorIDFile.open("secondaryAuthorID.txt", ios::in | ios::app);
     if (!sAuthorIDFile.is_open())
     {
-        sAuthorIDFile.open("secondaryAuthorID.txt", ios::in| ios::app);
+        sAuthorIDFile.open("secondaryAuthorID.txt", ios::in | ios::app);
     }
     if (sAuthorIDFile.peek() == EOF)
     {
@@ -426,12 +470,18 @@ void SLS::loadAuthorSecIndex()
     string id; // Assuming each name is at most 15 characters long
     int lineNum;
 
+    secAuthorMap.clear();
+    secAuthorIds.clear();
+
     while (!sAuthorIDFile.eof())
     {
         sAuthorIDFile >> id;
         sAuthorIDFile >> lineNum;
         secAuthorMap.insert({id, lineNum});
-
+        if (lineNum == -1)
+        {
+            continue;
+        }
         secAuthorIds.push_back(id);
 
         // Move the file pointer to the next line
@@ -456,19 +506,25 @@ void SLS::deleteAuthor()
 void SLS::deleteBook()
 {
     cout << "Enter book ISBN: ";
-    char isbn[15];
+    char temp[15];
     cin.ignore();
-    cin >> isbn;
+    cin >> temp;
+    string isbn(temp);
+    isbn = string(14 - isbn.length(), '0') + isbn;
+
     loadBookIndex();
-    if(binarySearch(bookISBN,isbn) == -1)
+    if (binarySearch(bookISBN, isbn) == -1)
     {
         cout << "Invalid Book ISBN\n";
         return;
     }
     int byteOffset = bookIsbnMap[isbn];
-    updateBookAVAIL(0,byteOffset,false);
 
-    updateISBNIndex(isbn, 0, false);
+    book = searchBook(isbn);
+
+    updateBookAVAIL(0, byteOffset, false);
+    updateISBNIndex(book.ISBN, 0, false);
+    updateSecondaryAuthorIDFile(book.authorID, book.ISBN, false);
 }
 
 void SLS::printAuthor()
@@ -478,11 +534,31 @@ void SLS::printAuthor()
 void SLS::printBook()
 {
     cout << "Enter book ISBN: ";
-    char isbn[15];
+    char temp[15];
     cin.ignore();
-    cin >> isbn;
+    cin >> temp;
+    string isbn(temp);
+    isbn = string(14 - isbn.length(), '0') + isbn;
 
     loadBookIndex();
+
+    if(binarySearch(bookISBN, isbn) == -1)
+    {
+        cout<< "There's no book with this ISBN: "<< temp<<"\n";
+    }
+    else
+    {
+        book = searchBook(isbn);
+        cout << "ISBN: " << book.ISBN << "\nTitle: " << book.title << "\nAuthor's ID: " << book.authorID << endl;
+    }
+
+}
+
+
+Book SLS::searchBook(string isbn)
+{
+    char tmp[15];
+    isbn.copy(tmp, sizeof(tmp) - 1);
 
     int recByteOffset = bookIsbnMap[isbn];
 
@@ -500,14 +576,12 @@ void SLS::printBook()
 
     ss >> length;
     ss.ignore();
-    ss.getline(isbn, 15, '|');
+    ss.getline(tmp, 15, '|');
     ss.getline(title, 30, '|');
     ss.getline(aid, 15);
-    cout << "Length: " << length << endl;
-
-    cout << "ISBN: " << isbn << ", title: " << title << ", aID: " << aid << endl;
 
     bookFile.close();
+    return Book(tmp, title, aid);
 }
 
 void SLS::query()
