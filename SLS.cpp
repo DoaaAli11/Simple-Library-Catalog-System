@@ -383,8 +383,12 @@ void SLS::updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag)
 
         if (binarySearch(secAuthorIds, authorID) == -1)
         {
-            secAuthorMap.insert({authorID, lineNum});
-            // sAuthorIDListFile << isbn << ' ' << "-1" << '\n';
+            auto it = secAuthorMap.find(authorID);
+            if (it != secAuthorMap.end()) {
+                secAuthorMap[authorID] = lineNum;
+            } else {
+                secAuthorMap.insert({authorID, lineNum});
+            }
             secIsbnList.push_back({isbn, -1});
         }
         else
