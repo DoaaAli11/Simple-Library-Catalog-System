@@ -58,7 +58,7 @@ private:
     void insertAuthorIndex(int recsize, char *id);
     int binarySearch(const vector<string> &iDs, string id);
     void loadBookIndex();
-    int getNewByteOffset();
+    int setCurByteOffset();
     void updateBookAVAIL(int beforeTarget, int target, bool flag);
     void updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag);
     void loadAuthorSecIndex();

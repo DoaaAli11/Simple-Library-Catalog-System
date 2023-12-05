@@ -205,7 +205,7 @@ void SLS::addAuthor()
     authorFile.close();
 }
 
-int SLS::getNewByteOffset()
+int SLS::setCurByteOffset()
 {
     //    get new byte offset
     short AVAIL;
@@ -219,7 +219,7 @@ int SLS::getNewByteOffset()
     curByteOffset = byteOffset;
     if (target == -1)
     {
-        return curByteOffset;
+        return -1;
     }
     else
     {
@@ -227,21 +227,22 @@ int SLS::getNewByteOffset()
         getline(bookFile, oldSizeRec, '|');
         getline(bookFile, nextByteoffsetAVAIL, '|');
 
-        int previouseByteOffset = 0;
+        int previousByteOffset = 0;
         while (true)
         {
             if (curRecordSize <= stoi(oldSizeRec))
             {
                 bookFile.seekp(target, ios::beg);
-                updateBookAVAIL(previouseByteOffset, stoi(nextByteoffsetAVAIL), true);
-                return target;
+                updateBookAVAIL(previousByteOffset, stoi(nextByteoffsetAVAIL), true);
+                curByteOffset = target;
+                return stoi(oldSizeRec);
             }
             else if (stoi(nextByteoffsetAVAIL) == -1)
             {
-                return curByteOffset;
+                return -1;
             }
             bookFile.seekg(stoi(nextByteoffsetAVAIL) + 1, ios::beg);
-            previouseByteOffset = target;
+            previousByteOffset = target;
             target = stoi(nextByteoffsetAVAIL);
             getline(bookFile, oldSizeRec, '|');
             getline(bookFile, nextByteoffsetAVAIL, '|');
@@ -291,28 +292,25 @@ void SLS::addBook()
     bookFile.open("Book.txt", ios::app | ios::in);
 
     bookFile.seekg(0, ios::end);
-    streampos byteOffset = bookFile.tellg();
-    curByteOffset = getNewByteOffset();
+    int byteOffset = bookFile.tellg();
+    int oldRecordSize = setCurByteOffset();
 
     if (curByteOffset != byteOffset)
     {
-        ostringstream concatenatedInput;
+        bookFile.close();
+        bookFile.open("Book.txt", ios::out | ios::in);
 
         // Concatenate the input into the string stream
-        concatenatedInput << std::setw(2) << std::setfill('0') << strlen(book.ISBN);
-        concatenatedInput << '|';
-        concatenatedInput.write(book.ISBN, strlen(book.ISBN));
-        concatenatedInput << '|';
-        concatenatedInput.write(book.title, strlen(book.title));
-        concatenatedInput << '|';
-        concatenatedInput.write(book.authorID, strlen(book.authorID));
-        concatenatedInput << "\n";
+        string input ="";
 
-        // Get the concatenated input as a string
-        string concatenatedString = concatenatedInput.str();
+        input = to_string(curRecordSize) + '|' + book.ISBN + '|' + book.title + '|' + book.authorID;
 
-        bookFile.seekp(curByteOffset, ios::beg);
-        bookFile << concatenatedString;
+        bookFile.seekp(curByteOffset);
+        if(oldRecordSize != curRecordSize)
+        {
+            input += '|';
+        }
+        bookFile << input;
     }
     else
     {
@@ -323,7 +321,6 @@ void SLS::addBook()
         bookFile.write((char *)book.title, strlen(book.title));
         bookFile << '|';
         bookFile.write((char *)book.authorID, strlen(book.authorID));
-
         bookFile << "\n";
     }
 
