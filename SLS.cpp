@@ -98,10 +98,10 @@ void SLS::loadBookIndex()
 
 void SLS::updateBookAVAIL(int beforeTarget, int target, bool flag)
 {
-    bookFile.open("Book.txt", ios::in | ios::out);
+    bookFile.close();
+    bookFile.open("Book.txt", ios::out | ios::in);
     if (flag)
     {
-        short temp;
         if (beforeTarget == 0)
         {
             bookFile.seekp(beforeTarget);
@@ -109,10 +109,11 @@ void SLS::updateBookAVAIL(int beforeTarget, int target, bool flag)
         }
         else
         {
+            short temp;
             bookFile.seekg(beforeTarget + 1, ios::beg);
             bookFile >> temp;
-            bookFile.seekp(beforeTarget + 1 + sizeof(temp));
-            bookFile << target;
+            bookFile.seekp(beforeTarget + 2 + sizeof(temp));
+            bookFile << target << '|';
         }
         bookFile.close();
         return;
@@ -120,12 +121,12 @@ void SLS::updateBookAVAIL(int beforeTarget, int target, bool flag)
     string header;
     bookFile.seekg(0, ios::beg);
     getline(bookFile, header, '|');
-    string recSize;
+    string rec;
     bookFile.seekg(target);
-    getline(bookFile, recSize, '|');
+    getline(bookFile, rec, '\n');
 
     bookFile.seekp(target);
-    bookFile << '*' << recSize << '|' << header << '|';
+    bookFile << '*' << rec.size() << '|' << header << '|';
 
     bookFile.seekp(0, ios::beg);
     bookFile << target << '|';
@@ -232,7 +233,6 @@ int SLS::setCurByteOffset()
         {
             if (curRecordSize <= stoi(oldSizeRec))
             {
-                bookFile.seekp(target, ios::beg);
                 updateBookAVAIL(previousByteOffset, stoi(nextByteoffsetAVAIL), true);
                 curByteOffset = target;
                 return stoi(oldSizeRec);
