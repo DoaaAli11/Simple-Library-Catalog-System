@@ -1,17 +1,15 @@
 #include "bits-stdc++.h"
 // if you're working on VS code comment #include "SLS.h" and uncomment #include "SLS.cpp"
 // if you're working on Clion comment #include "SLS.cpp" and uncomment #include "SLS.h"
-//#include "SLS.cpp"
- #include "SLS.h"
+#include "SLS.cpp"
+// #include "SLS.h"
 
 using namespace std;
 
 int main()
-{            string n ;
-
+{
     SLS system;
     int choice = 1;
-    string isbn;
     cout << "Welcome to our simple library system :)\n\n";
     while (choice != 0)
     {
@@ -45,13 +43,7 @@ int main()
             system.deleteAuthor();
             break;
         case 6:
-            cout << "Enter book ISBN: ";
-            char temp[15];
-            cin.ignore();
-            cin >> temp;
-            isbn = temp;
-            isbn = string(14 - isbn.length(), '0') + isbn;
-            system.deleteBook(isbn);
+            system.deleteBook();
             break;
         case 7:
             system.printAuthor();
