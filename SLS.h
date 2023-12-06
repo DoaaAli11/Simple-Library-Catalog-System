@@ -64,12 +64,13 @@ private:
     void loadAuthorSecIndex();
     void loadIsbnSecList();
     Book searchBook(string isbn);
-
-    //
-    // add your own index functions and any other functions as you need
     //
 
 public:
+
+    //
+    // add your own index functions and any other functions as you need
+    void deleteAllAuthorBooks(string authorId);
     // constructors and destructors
     SLS();
     SLS(Author a);
@@ -83,7 +84,7 @@ public:
     void updateAuthorName();
     void updateBookTitle();
     void deleteAuthor();
-    void deleteBook();
+    void deleteBook(string isbn);
     void printAuthor();
     void printBook();
     void query();

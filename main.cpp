@@ -7,9 +7,11 @@
 using namespace std;
 
 int main()
-{
+{            string n ;
+
     SLS system;
     int choice = 1;
+    string isbn;
     cout << "Welcome to our simple library system :)\n\n";
     while (choice != 0)
     {
@@ -43,7 +45,13 @@ int main()
             system.deleteAuthor();
             break;
         case 6:
-            system.deleteBook();
+            cout << "Enter book ISBN: ";
+            char temp[15];
+            cin.ignore();
+            cin >> temp;
+            isbn = temp;
+            isbn = string(14 - isbn.length(), '0') + isbn;
+            system.deleteBook(isbn);
             break;
         case 7:
             system.printAuthor();

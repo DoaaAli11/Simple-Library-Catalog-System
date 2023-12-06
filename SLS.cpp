@@ -324,7 +324,6 @@ void SLS::addBook()
         bookFile << "\n";
     }
 
-    // insertSortedPrimaryIndex(book.ISBN, curByteOffset);
     updateISBNIndex(book.ISBN, curByteOffset, true);
     updateSecondaryAuthorIDFile(book.authorID, book.ISBN, true);
     bookFile.flush();
@@ -504,15 +503,8 @@ void SLS::deleteAuthor()
 {
 }
 
-void SLS::deleteBook()
+void SLS::deleteBook(string isbn)
 {
-    cout << "Enter book ISBN: ";
-    char temp[15];
-    cin.ignore();
-    cin >> temp;
-    string isbn(temp);
-    isbn = string(14 - isbn.length(), '0') + isbn;
-
     loadBookIndex();
     if (binarySearch(bookISBN, isbn) == -1)
     {
@@ -584,7 +576,37 @@ Book SLS::searchBook(string isbn)
     bookFile.close();
     return Book(tmp, title, aid);
 }
+// to be called in author deletion
+void SLS::deleteAllAuthorBooks(string authorId)
+{
+    vector<string> books;
+    loadAuthorSecIndex();
+    loadIsbnSecList();
+    authorId = string(14 - authorId.length(), '0') + authorId;
+    int lineNum = secAuthorMap[authorId];
 
+    while(lineNum > -1)
+    {
+        int temp = lineNum;
+        string isbn = secIsbnList[lineNum].first;
+        deleteBook(isbn);
+        lineNum = secAuthorMap[authorId];
+    }
+    sAuthorIDFile.close();
+    sAuthorIDFile.open("secondaryAuthorID.txt", ios::out);
+    for (auto i : secAuthorMap)
+    {
+        sAuthorIDFile << i.first << " " << i.second << "\n";
+    }
+    sAuthorIDFile.close();
+
+    sAuthorIDListFile.open("secIsbnList.txt", ios::out);
+    for (auto i : secIsbnList)
+    {
+        sAuthorIDListFile << i.first << " " << i.second << "\n";
+    }
+    sAuthorIDListFile.close();
+}
 void SLS::query()
 {
 }
