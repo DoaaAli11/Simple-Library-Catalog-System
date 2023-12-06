@@ -63,14 +63,14 @@ private:
     void updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag);
     void loadAuthorSecIndex();
     void loadIsbnSecList();
+    void deleteAllAuthorBooks(string authorId);
     Book searchBook(string isbn);
+    //
+    // add your own index functions and any other functions as you need
+
     //
 
 public:
-
-    //
-    // add your own index functions and any other functions as you need
-    void deleteAllAuthorBooks(string authorId);
     // constructors and destructors
     SLS();
     SLS(Author a);
