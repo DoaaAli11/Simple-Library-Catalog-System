@@ -657,7 +657,6 @@ void SLS::updateBookTitle()
     char newTitle[30];
     cin.ignore();
     cin >> newTitle;
-    cout << strlen(newTitle) << endl;
 
     if (strlen(newTitle) == strlen(book.title))
     {
@@ -669,12 +668,22 @@ void SLS::updateBookTitle()
     }
     else if (strlen(newTitle) > strlen(book.title))
     {
-        // cout << book.title << endl;
-        // cout << book.title << endl;
-
         deleteBook(isbn);
         strcpy(book.title, newTitle);
         addBook(book);
+    }
+    else
+    {
+        strcpy(book.title, newTitle);
+
+        string input = "";
+        curRecordSize = strlen(book.ISBN) + strlen(book.title) + strlen(book.authorID) + 3;
+        input = to_string(curRecordSize) + '|' + book.ISBN + '|' + book.title + '|' + book.authorID +'|';
+
+        bookFile.open("Book.txt", ios::out | ios::in);
+        bookFile.seekp(byteOffset, ios::beg);
+        bookFile << input;
+        bookFile.close();
     }
 }
 
