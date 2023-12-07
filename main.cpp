@@ -12,7 +12,8 @@ int main()
     loadSecondaryMap();
     loadPindex();
     loadLinkedSize();
-
+    char aName[30];
+    char aid[15];
     int choice = 1;
     cout << "Welcome to our simple library system :)\n\n";
     while (choice != 0)
@@ -50,7 +51,12 @@ int main()
                 system.addBook();
                 break;
             case 3:
-                system.updateAuthorName();
+                cout << "Enter Author ID: ";
+                cin >> aid;
+                cout << "Enter Author Name: ";
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                cin.getline(aName , 30 , '\n');
+                system.updateAuthorName(aid , aName);
                 break;
             case 4:
                 system.updateBookTitle();
