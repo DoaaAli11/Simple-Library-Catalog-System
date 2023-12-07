@@ -313,8 +313,11 @@ void SLS::loadAuthorSecIndex()
         {
             continue;
         }
-        secAuthorIds.push_back(id);
+        auto it = find(secAuthorIds.begin(), secAuthorIds.end(), id);
 
+        if (it == secAuthorIds.end()) {
+                secAuthorIds.push_back(id);
+        }
         // Move the file pointer to the next line
         sAuthorIDFile.ignore(numeric_limits<streamsize>::max(), '\n');
     }
@@ -1191,6 +1194,8 @@ void SLS::bookQueries(SqlQuery query)
               query.condition_attribute.begin(), ::tolower);
     transform(query.projection.begin(), query.projection.end(),
               query.projection.begin(), ::tolower);
+
+    query.condition_value = string(14 - query.condition_value.length(), '0') + query.condition_value;
     if(query.condition_attribute == "isbn")
     {
         if(binarySearch(bookISBN, query.condition_value) == -1)
