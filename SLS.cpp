@@ -37,9 +37,6 @@ void SLS::loadPindex(){
     }
     sort(authorIds.begin() , authorIds.end());
     file.close();
-    for (int i = 0; i < authorIds.size(); ++i) {
-        cout << authorIds[i] << endl;
-    }
 }
 void SLS::addToLinked(char id[15] , char name[30])
 {
@@ -71,9 +68,6 @@ void SLS::loadSecondaryMap(){
     secondaryFile.close();
     secondaryFile.open("author_secondaryIndex.txt" , ios::in);
 
-    if (secondaryFile.is_open()) {
-        cout << "done";
-    }
 
     string line;
     while (std::getline(secondaryFile, line)) {
@@ -84,11 +78,10 @@ void SLS::loadSecondaryMap(){
         if (is >> name >> byteOffset) {
             secondary[name] = byteOffset;
         } else {
-            std::cout << "Error parsing line: " << line << std::endl;
+            cout << "Error parsing line: " << line << std::endl;
         }
     }
     secondaryFile.close();
-    cout<<"Done\n";
 }
 int SLS::findAuthSecondary(char name[30])
 {
@@ -134,12 +127,11 @@ void SLS::store_Index()
         if (is >> id >> byteOffset) {
             indexing[id] = byteOffset;
         } else {
-            std::cout << "Error parsing line: " << line << std::endl;
+            cout << "Error parsing line: " << line << std::endl;
         }
     }
     sort(authorIds.begin(), authorIds.end());
     pIndex.close();
-    cout<<"Done\n";
 }
 
 void SLS::insertAuthPrimaryIndex(char recsize[15] , char id[15])
@@ -796,7 +788,7 @@ void SLS::searchAuthor(long Id)
         authorFile.get();
         string line;
         getline(authorFile, line);
-        cout<<"the Author Founded.. \n";
+        cout<<"The Author Founded.. \n";
         istringstream ss(line);
         string token;
         vector<std::string> tokens;
@@ -842,11 +834,8 @@ void SLS:: store_Inverted_In_Vector() {
             }
         }
     }
-    cout<<"Done Inverted\n";
     linkedFile.close();
-    for (const auto& pair : Inverted) {
-        std::cout << "ID: " << pair.first << ", Number: " << pair.second << '\n';
-    }
+
 }
 void SLS:: retrieve_into_Inverted()
 {
@@ -863,7 +852,6 @@ void SLS::retrieve_into_Secondary()
     for (const auto& pair : secondary) {
         pIndex << pair.first << " " << pair.second << std::endl;
     }
-    cout<<"Done\n";
     pIndex.close();
 }
 void SLS::retrieve_into_index()
@@ -872,7 +860,6 @@ void SLS::retrieve_into_index()
     for (const auto& pair : indexing) {
         pIndex << pair.first << " " << pair.second << std::endl;
     }
-    cout<<"Done\n";
     pIndex.close();
 }
 // End of needed methods
@@ -892,14 +879,9 @@ void SLS::addAuthor()
         return;
     }
     authorIds.push_back(stoi(author.ID));
-    for (int i = 0; i < authorIds.size(); ++i) {
-        cout << authorIds[i] << endl;
-    }
+
     authorFile.open("author.txt" , ios::in);
-    if(authorFile.is_open())
-    {
-        cout << "yes";
-    }
+
     string avl;
     getline(authorFile ,avl );
     authorFile.close();
@@ -1066,9 +1048,6 @@ void SLS::updateBookTitle()
     }
     else if (strlen(newTitle) > strlen(book.title))
     {
-        // cout << book.title << endl;
-        // cout << book.title << endl;
-
         deleteBook(isbn);
         strcpy(book.title, newTitle);
         addBook(book);
@@ -1114,7 +1093,6 @@ void SLS::deleteAuthor(long Id, bool flag)
         auto it = indexing.find(Id);
         indexing.erase(it);
         retrieve_into_index();
-        cout<<"Done\n";
         if(flag)
             deleteAllAuthorBooks(to_string(Id));
     }
