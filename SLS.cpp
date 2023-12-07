@@ -209,7 +209,7 @@ SLS::SLS()
     tell = authorFile.tellg();
     if (tell == 0)
     {
-        authorFile << "-1\n";
+        authorFile << "-1|---\n";
     }
     authorFile.seekg(0, ios::end);
     tell = authorFile.tellg();
@@ -883,7 +883,7 @@ void SLS::addAuthor()
     authorFile.open("author.txt" , ios::in);
 
     string avl;
-    getline(authorFile ,avl );
+    getline(authorFile ,avl, '|' );
     authorFile.close();
     if(avl != "-1")
     {
@@ -907,13 +907,13 @@ void SLS::addAuthor()
             authorFile.write((char*) (author.address) , strlen(author.address));
             authorFile << "|";
             char buffer[15];
-            std::snprintf(buffer, sizeof(buffer), "%s", (avl.c_str()));
-            indexing[stoi(author.ID)] = stoi(avl);
+            snprintf(buffer, sizeof(buffer), "%s", (avl.c_str()));
+            indexing[stol(author.ID)] = stol(avl);
             insertAuthPrimaryIndex(buffer , author.ID);
             authorFile.seekp(0,ios::beg);
             num = num.substr(1,num.size());
             authorFile << num;
-            authorFile << '\n';
+            authorFile << '|';
             authorFile.close();
             return;
         }
@@ -1064,7 +1064,7 @@ void SLS::deleteAuthor(long Id, bool flag)
     {
         auto end = std::remove(authorIds.begin() , authorIds.end() , Id);
         authorIds.erase(end, authorIds.end());
-        char List[10];
+        string List;
         ////get Avail List
         authorFile.open("author.txt" , ios::in);
         int ByteOffset=indexing[Id];
@@ -1074,18 +1074,18 @@ void SLS::deleteAuthor(long Id, bool flag)
         getline(authorFile,record,'\n');
         string size=to_string(record.length());
         authorFile.seekg(ios::beg);
-        authorFile.getline(List,sizeof (List));
+        getline(authorFile, List, '|');
         authorFile.close();
 
         ////get byte offset of deleted record
         string Byte=to_string(ByteOffset);
         authorFile.open("author.txt", std::ios::in | std::ios::out);
         authorFile.seekp(ios::beg);
-        authorFile.write(Byte.c_str(),2);
+        authorFile << Byte << '|';
         authorFile.seekp(ByteOffset,ios::beg);
         ///insert size and pre deleted
         authorFile.write("*",1);
-        authorFile.write(List,2);
+        authorFile << List;
         authorFile.write("|",1);
         authorFile<<size;
         authorFile.write("|",1);
