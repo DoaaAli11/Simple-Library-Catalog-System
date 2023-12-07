@@ -7,12 +7,12 @@
 #ifndef SLS_H
 #define SLS_H
 using namespace std;
-void loadPindex();
-int findAuthSecondary(char name[30]);
-void loadLinkedSize();
-void loadSecondaryMap();
-void store_Index();
-void retrieve_into_index();
+//void loadPindex();
+//int findAuthSecondary(char name[30]);
+//void loadLinkedSize();
+//void loadSecondaryMap();
+//void store_Index();
+//void retrieve_into_index();
 
 // Declare Author struct
 struct Author
@@ -33,7 +33,12 @@ struct Book
     Book();
     Book(char isbn[15], char t[30], char aID[15]);
 };
-
+struct SqlQuery {
+    string projection;
+    string table_name;
+    string condition_attribute;
+    string condition_value;
+};
 // Declare Simple Library System class SLS
 class SLS
 {
@@ -59,12 +64,14 @@ public:
     short curByteOffset = 0;
 
     // Vectors for primary and secondary attributes
-//    vector<int> authorIds;
     vector<int> AuthorByteOffset;
     vector<string> bookISBN;
     vector<string> secAuthorIds;
     vector<pair<string, int>> secIsbnList;
-
+    vector <long> authorIds;
+    map<int,long> indexing;
+    map<string , long> secondary;
+    vector<pair<long,int>>Inverted;
     // Map for primary index
     map<string, int> bookIsbnMap;
     // Map for secondary index
@@ -89,15 +96,25 @@ public:
 
     // Needed methods
     int binarySearch(const vector<string> &iDs, string id);
-    int binarySearch(const vector<int> &iDs, int id);
+    int binarySearch(const vector<long> &iDs, long id);
     int setCurByteOffset();
     Book searchBook(string isbn);
     void addBook(Book b);
     void deleteBook(string isbn);
     void deleteAllAuthorBooks(string authorId);
-
-//    void insertAuthorIndex(int recsize, char *id);
-
+    vector<Book> searchAllAuthorBooks(string authorId);
+    int findAuthSecondary(char name[30]);
+    void loadSecondaryMap();
+    int binarySearch( vector<int>& iDs, int id);
+    void retrieve_into_index();
+    void loadPindex();
+    void loadLinkedSize();
+    bool Check_Primary_key(int Byteoffset,int Id);
+    void retrieve_into_Inverted();
+    void store_Inverted_In_Vector();
+    void store_Index();
+    void retrieve_into_Secondary();
+    void delete_From_Secondary(string authorName,int Id);
 public:
     //
     // add your own index functions and any other functions as you need
@@ -116,11 +133,15 @@ public:
     void addBook();
     void updateAuthorName(char* id, char* name);
     void updateBookTitle();
-    void deleteAuthor(int Id);
+    void deleteAuthor(long Id, bool flag);
     void deleteBook();
-    void searchAuthor(int id);
-    void printBook();
-    void query();
+    void searchAuthor(long id);
+    void printBook(char* isbn);
+    void writeQuery(string query);
+    void authorQueries(SqlQuery query);
+    void bookQueries(SqlQuery query);
+
+
 };
 
 #endif // SLS_H

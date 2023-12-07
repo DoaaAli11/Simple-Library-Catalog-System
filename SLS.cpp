@@ -8,13 +8,12 @@
 #include <vector>
 #include "SLS.h"
 using namespace std;
+
 int presize = 0;
 int recsize;
 int linkedresize = 0;
-vector <int> authorIds;
-map<int,long> indexing;
-map<string , long> secondary;
-void loadLinkedSize(){
+
+void SLS::loadLinkedSize(){
     fstream file("list_author.txt",ios::app);
     file.close();
     file.open("list_author.txt" , ios::in);
@@ -26,7 +25,7 @@ void loadLinkedSize(){
     if(linkedresize != 0)
         linkedresize=-1;
 }
-void loadPindex(){
+void SLS::loadPindex(){
     fstream file("author_pIndex.txt" , ios::in);
     string record;
     while (getline(file ,record))
@@ -67,7 +66,7 @@ void SLS::addToLinked(char id[15] , char name[30])
     }
 }
 
-void loadSecondaryMap(){
+void SLS::loadSecondaryMap(){
     fstream secondaryFile("author_secondaryIndex.txt", ios::app);
     secondaryFile.close();
     secondaryFile.open("author_secondaryIndex.txt" , ios::in);
@@ -91,7 +90,7 @@ void loadSecondaryMap(){
     secondaryFile.close();
     cout<<"Done\n";
 }
-int findAuthSecondary(char name[30])
+int SLS::findAuthSecondary(char name[30])
 {
     if(secondary.find(name) != secondary.end()){
         return secondary[name];
@@ -101,7 +100,7 @@ int findAuthSecondary(char name[30])
         return -1;
     }
 }
-int binarySearch( vector<int>& iDs, int id) {
+int SLS::binarySearch(const vector<long> &iDs, long id) {
     int left = 0;
     int right = iDs.size() - 1;
 
@@ -122,7 +121,7 @@ int binarySearch( vector<int>& iDs, int id) {
 
     return -1;
 }
-void store_Index()
+void SLS::store_Index()
 {
     fstream pIndex = fstream("author_pIndex.txt" , ios::in);
     long lastrecS;
@@ -141,15 +140,6 @@ void store_Index()
     sort(authorIds.begin(), authorIds.end());
     pIndex.close();
     cout<<"Done\n";
-}
-void retrieve_into_index()
-{
-    fstream pIndex = fstream("author_pIndex.txt" , ios::out);
-    for (const auto& pair : indexing) {
-        pIndex << pair.first << " " << pair.second << std::endl;
-    }
-    cout<<"Done\n";
-
 }
 
 void SLS::insertAuthPrimaryIndex(char recsize[15] , char id[15])
@@ -526,7 +516,55 @@ void SLS::updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag)
     }
     sAuthorIDListFile.close();
 }
+void SLS::delete_From_Secondary(string authorName,int Id)
+{
+    store_Inverted_In_Vector();
+    int Inverted_byteOffset=secondary[authorName];
+    int PK=Inverted[Inverted_byteOffset].first;
+    int NextByteOff=Inverted[Inverted_byteOffset].second;
+    ///case that this Author's name has only one record
+    if(PK==Id)
+    {
+        secondary[authorName] = NextByteOff;
+        //-2 rather than # because we store integer
+        Inverted[Inverted_byteOffset].second = -2;
+    }
+        ///case that this Author's name has more than one record
+    else
+    {
+        int prevOffset=Inverted_byteOffset;
+        while (true)
+        {
+            PK=Inverted[NextByteOff].first;
+            if(PK==Id)
+            {
+//                secondary[authorName] = NextByteOff;
+                Inverted[prevOffset].second=Inverted[NextByteOff].second;
+                //-2 rather than # because we store integer
+                Inverted[NextByteOff].second = -2;
+                break;
+            }
+            prevOffset=NextByteOff;
+            NextByteOff=Inverted[NextByteOff].second;
 
+        }
+
+    }
+    retrieve_into_Inverted();
+    retrieve_into_Secondary();
+
+}
+string GetAuthorName(string record)
+{
+    istringstream ss(record);
+    string token;
+    vector<std::string> tokens;
+    while (getline(ss, token, '|')) {
+        tokens.push_back(token);
+    }
+    return tokens[1];
+
+}
 // End of update methods
 
 // ----------------------------------------------------------------------------------------------
@@ -537,32 +575,6 @@ void SLS::updateSecondaryAuthorIDFile(char *authorID, char *isbn, bool flag)
 // returns -1 if not found
 // returns the index of the element if found
 int SLS::binarySearch(const vector<string> &iDs, string id)
-{
-    int left = 0;
-    int right = iDs.size() - 1;
-
-    while (left <= right)
-    {
-        int mid = left + (right - left) / 2;
-
-        if (iDs[mid] == id)
-        {
-            return mid;
-        }
-
-        if (iDs[mid] < id)
-        {
-            left = mid + 1;
-        }
-        else
-        {
-            right = mid - 1;
-        }
-    }
-
-    return -1;
-}
-int SLS::binarySearch(const vector<int> &iDs, int id)
 {
     int left = 0;
     int right = iDs.size() - 1;
@@ -667,7 +679,7 @@ Book SLS::searchBook(string isbn)
 // Add a book in the data file and call update methods
 void SLS::addBook(Book b)
 {
-    if(binarySearch(authorIds,stoi(book.authorID)) == -1)
+    if(binarySearch(authorIds,stol(book.authorID)) == -1)
     {
         cout << "Not valid Author ID!\n";
         return;
@@ -737,7 +749,6 @@ void SLS::deleteBook(string isbn)
 // to be called in author deletion
 void SLS::deleteAllAuthorBooks(string authorId)
 {
-    vector<string> books;
     loadAuthorSecIndex();
     loadIsbnSecList();
     authorId = string(14 - authorId.length(), '0') + authorId;
@@ -769,11 +780,11 @@ void SLS::deleteAllAuthorBooks(string authorId)
     }
     sAuthorIDListFile.close();
 }
-void SLS::searchAuthor(int Id)
+void SLS::searchAuthor(long Id)
 {
     int check= binarySearch(authorIds,Id);
     store_Index();
-//    auto check = indexing.find(Id);
+
     if (check != -1) {
         authorFile.open("file.txt", ios::in);
         long ByteOffset=indexing[Id];
@@ -798,6 +809,69 @@ void SLS::searchAuthor(int Id)
         cout<<"Sorry this author not exist\n";
     }
 }
+void SLS:: store_Inverted_In_Vector() {
+    Inverted.clear();
+    linkedFile.open("linked.txt", ios::in | ios::app);
+    while (!linkedFile.fail())
+    {
+        // Read and extract key and integer value from the 5th line
+        string line;
+        getline(linkedFile, line);
+
+        istringstream iss(line);
+        string Id;
+        string lineNum;
+
+        // Read key and value from the line
+        if (iss >> Id >> lineNum)
+        {
+            try
+            {
+                Inverted.push_back({stoi(Id), stoi(lineNum)});
+            }
+            catch (const invalid_argument &e)
+            {
+                cerr << "Error converting value to integer on line: " << line << endl;
+            }
+            catch (const out_of_range &e)
+            {
+                cerr << "Value out of range on line: " << line << endl;
+            }
+        }
+    }
+    cout<<"Done Inverted\n";
+    linkedFile.close();
+    for (const auto& pair : Inverted) {
+        std::cout << "ID: " << pair.first << ", Number: " << pair.second << '\n';
+    }
+}
+void SLS:: retrieve_into_Inverted()
+{
+    linkedFile.open("linked.txt", ios::out);
+    for (auto i : Inverted)
+    {
+        linkedFile << i.first << " " << i.second << "\n";
+    }
+    linkedFile.close();
+}
+void SLS::retrieve_into_Secondary()
+{
+    fstream pIndex = fstream("author_secondaryIndex.txt" , ios::out);
+    for (const auto& pair : secondary) {
+        pIndex << pair.first << " " << pair.second << std::endl;
+    }
+    cout<<"Done\n";
+    pIndex.close();
+}
+void SLS::retrieve_into_index()
+{
+    fstream pIndex = fstream("author_pIndex.txt" , ios::out);
+    for (const auto& pair : indexing) {
+        pIndex << pair.first << " " << pair.second << std::endl;
+    }
+    cout<<"Done\n";
+    pIndex.close();
+}
 // End of needed methods
 
 // ----------------------------------------------------------------------------------------------
@@ -810,7 +884,7 @@ void SLS::searchAuthor(int Id)
 // Add an author
 void SLS::addAuthor()
 {
-    if( binarySearch(authorIds , stoi(author.ID)) != -1)
+    if( binarySearch(authorIds , stol(author.ID)) != -1)
     {
         return;
     }
@@ -920,7 +994,7 @@ void SLS::addBook()
 void SLS::updateAuthorName(char* id, char* name)
 {
     string temp(id);
-    if(binarySearch(authorIds, stoi(temp)) == -1)
+    if(binarySearch(authorIds, stol(temp)) == -1)
     {
         cout << "Invalid Author ID!\n";
         return;
@@ -933,9 +1007,10 @@ void SLS::updateAuthorName(char* id, char* name)
     char* address;
     getline(authorFile, aid, '|');
     getline(authorFile, prevName, '|');
-//    getline(authorFile, address, '|');
     authorFile >> address;
     authorFile.close();
+    int len = strlen(address);
+    address[len - 1] = '\0';
     if(prevName.length() >= strlen(name))
     {
         authorFile.open("author.txt", ios::in | ios:: out);
@@ -945,12 +1020,7 @@ void SLS::updateAuthorName(char* id, char* name)
     }
     else
     {
-        deleteAuthor(stoi(temp));
-        char tmp[15];
-        char ntmp[30];
-        char addtmp[30];
-        aid.copy(tmp, sizeof(tmp) - 1);
-//        address.copy(addtmp, strlen(address));
+        deleteAuthor(stoi(temp), false);
         author = Author(id,name, address);
         addAuthor();
     }
@@ -1003,7 +1073,7 @@ void SLS::updateBookTitle()
 }
 
 // Delete author using author ID
-void SLS::deleteAuthor(int Id)
+void SLS::deleteAuthor(long Id, bool flag)
 {
     //store index into Map
     store_Index();
@@ -1042,8 +1112,8 @@ void SLS::deleteAuthor(int Id)
         indexing.erase(it);
         retrieve_into_index();
         cout<<"Done\n";
-//        indexing.erase(Id);
-        deleteAllAuthorBooks(to_string(Id));
+        if(flag)
+            deleteAllAuthorBooks(to_string(Id));
     }
     else
         cout<<"This author doesn't exist\n";
@@ -1066,12 +1136,8 @@ void SLS::deleteBook()
 
 
 // Print book information using book ISBN
-void SLS::printBook()
+void SLS::printBook(char* temp)
 {
-    cout << "Enter book ISBN: ";
-    char temp[15];
-    cin.ignore();
-    cin >> temp;
     string isbn(temp);
     isbn = string(14 - isbn.length(), '0') + isbn;
 
@@ -1090,8 +1156,204 @@ void SLS::printBook()
 
 // Write a query to fetch the needed information
 // from the files using indexes
-void SLS::query()
+void SLS::writeQuery(string query)
 {
+    regex select_regex("Select (.+?) from (.+?) where (.+?)=(.+?)$");
+    smatch match;
+
+    if (regex_match(query, match, select_regex)) {
+        SqlQuery sqlQuery = {
+                match[1].str(),
+                match[2].str(),
+                match[3].str(),
+                match[4].str()
+        };
+        sqlQuery.condition_value = sqlQuery.condition_value.substr(3,sqlQuery.condition_value.size()-7);
+        if(sqlQuery.table_name == "Books")
+        {
+            bookQueries(sqlQuery);
+        }
+        else if(sqlQuery.table_name == "Authors")
+            authorQueries(sqlQuery);
+    }
+    else {
+        cout << "Invalid Query!\n";
+        return;
+    }
 }
+void SLS::bookQueries(SqlQuery query)
+{
+    loadBookIndex();
+    loadIsbnSecList();
+    loadAuthorSecIndex();
 
+    transform(query.condition_attribute.begin(), query.condition_attribute.end(),
+              query.condition_attribute.begin(), ::tolower);
+    transform(query.projection.begin(), query.projection.end(),
+              query.projection.begin(), ::tolower);
+    if(query.condition_attribute == "isbn")
+    {
+        if(binarySearch(bookISBN, query.condition_value) == -1)
+        {
+            cout << "Invalid ISBN!\n";
+            return;
+        }
+        book = searchBook(query.condition_value);
+        // select all from book where isbn = 'xxx';
+        if(query.projection == "all")
+        {
+            cout << "ISBN: " << book.ISBN << "\nTitle: " << book.title << "\nAuthor's ID: " << book.authorID << endl;
+        }
+            // select title from book where isbn = 'xxx';
+        else if(query.projection == "title")
+        {
+            cout <<"Title: " << book.title << '\n';
+        }
+            // select author id from book where isbn = 'xxx';
+        else if(query.projection == "author id")
+        {
+            cout <<"Author ID: " << book.authorID << '\n';
+        }
+    }
+    else if(query.condition_attribute == "author id")
+    {
+        vector<Book> books = searchAllAuthorBooks(query.condition_value);
+        if(books.empty()) return;
+        // select all from book where author id = 'xxx';
+        if(query.projection == "all")
+        {
+            for(auto b: books)
+            {
+                cout << "ISBN: " << b.ISBN << "\nTitle: " << b.title << "\nAuthor's ID: " << b.authorID << endl;
+            }
+        }
+            // select title from book where author id = 'xxx';
+        else if(query.projection == "title")
+        {
+            for(auto b: books)
+            {
+                cout <<"Title: " << b.title << '\n';
+            }
+        }
+            // select author id from book where author id = 'xxx';
+        else if(query.projection == "author id")
+        {
+            for(auto b: books)
+            {
+                cout <<"Author ID: " << b.authorID << '\n';
+            }
+        }
+    }
+}
+void SLS::authorQueries(SqlQuery query)
+{
 
+    transform(query.condition_attribute.begin(), query.condition_attribute.end(),
+              query.condition_attribute.begin(), ::tolower);
+    transform(query.projection.begin(), query.projection.end(),
+              query.projection.begin(), ::tolower);
+    if(query.condition_attribute == "author id")
+    {
+        if(binarySearch(authorIds, stol(query.condition_value)) == -1)
+        {
+            cout << "Invalid Author ID!\n";
+            return;
+        }
+        authorFile.open("author.txt", ios::in);
+        int byteOffset = indexing[stol(query.condition_value)];
+        authorFile.seekg(byteOffset, ios::beg);
+        string id, name, address;
+        getline(authorFile, id, '|');
+        getline(authorFile, name, '|');
+        getline(authorFile, address, '|');
+        authorFile.close();
+        if(query.projection == "all")
+        {
+            cout << "ID: " << id << "\nName: " << name << "\naddress: " << address << '\n';
+        }
+        else if(query.projection == "author id")
+        {
+            cout << "ID: " << id << "\n";
+        }
+        else if(query.projection == "name")
+        {
+            cout << "Name: " << name << "\n";
+        }
+        else if(query.projection == "address")
+        {
+            cout << "address: " << address << "\n";
+        }
+    }
+    else if(query.condition_attribute == "author name")
+    {
+
+        if(secondary.find(query.condition_attribute) == secondary.end())
+        {
+            cout << "Invalid Author Name!\n";
+            return;
+        }
+        else
+        {
+            int lineNum = secondary[query.condition_value];
+            vector<Author> auth;
+            while (lineNum > -1)
+            {
+                long aid = Inverted[lineNum].first;
+
+                authorFile.open("author.txt", ios::in);
+                int byteOffset = indexing[aid];
+                authorFile.seekg(byteOffset, ios::beg);
+                string id, name, address;
+                getline(authorFile, id, '|');
+                getline(authorFile, name, '|');
+                getline(authorFile, address, '|');
+                authorFile.close();
+
+                if(query.projection == "all")
+                {
+                    cout << "ID: " << id << "\nName: " << name << "\naddress: " << address << '\n';
+                }
+                else if(query.projection == "author id")
+                {
+                    cout << "ID: " << id << "\n";
+                }
+                else if(query.projection == "name")
+                {
+                    cout << "Name: " << name << "\n";
+                }
+                else if(query.projection == "address")
+                {
+                    cout << "address: " << address << "\n";
+                }
+
+                lineNum = Inverted[lineNum].second;
+            }
+        }
+    }
+}
+vector<Book> SLS::searchAllAuthorBooks(string authorId)
+{
+    vector<Book> books;
+
+    loadAuthorSecIndex();
+    loadIsbnSecList();
+    authorId = string(14 - authorId.length(), '0') + authorId;
+    if(binarySearch(secAuthorIds,authorId) == -1)
+    {
+        cout << "Invalid Author ID!\n";
+    }
+    else
+    {
+        int lineNum = secAuthorMap[authorId];
+
+        while (lineNum > -1)
+        {
+            int temp = lineNum;
+            string isbn = secIsbnList[lineNum].first;
+            Book book1 = searchBook(isbn);
+            books.push_back(book1);
+            lineNum = secIsbnList[lineNum].second;
+        }
+    }
+    return books;
+}

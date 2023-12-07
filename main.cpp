@@ -8,13 +8,14 @@ using namespace std;
 int main()
 {
     SLS system;
-    store_Index();
-    loadSecondaryMap();
-    loadPindex();
-    loadLinkedSize();
+    system.store_Index();
+    system.loadSecondaryMap();
+    system.loadPindex();
+    system.loadLinkedSize();
     char aName[30];
     char aid[15];
     int choice = 1;
+    string query;
     cout << "Welcome to our simple library system :)\n\n";
     while (choice != 0)
     {
@@ -65,19 +66,27 @@ int main()
                 cout << "enter auth id" << endl;
                 int id;
                 cin >> id;
-                system.deleteAuthor(id);
+                system.deleteAuthor(id, true);
                 break;
             }
             case 6:
                 system.deleteBook();
                 break;
             case 7:
+                system.searchAuthor(stoi(system.author.ID));
                 break;
             case 8:
-                system.printBook();
+                cout << "Enter book ISBN: ";
+                char temp[15];
+                cin.ignore();
+                cin >> temp;
+                system.printBook(temp);
                 break;
             case 9:
-                system.query();
+                cout << "Enter Your Query: ";
+                cin.ignore();
+                getline(cin,query);
+                system.writeQuery(query);
                 break;
             case 0:
                 break;
