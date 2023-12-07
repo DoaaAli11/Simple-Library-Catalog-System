@@ -6,9 +6,13 @@
 
 #ifndef SLS_H
 #define SLS_H
-
 using namespace std;
-
+void loadPindex();
+int findAuthSecondary(char name[30]);
+void loadLinkedSize();
+void loadSecondaryMap();
+void store_Index();
+void retrieve_into_index();
 struct Author
 {
     char ID[15];
@@ -30,19 +34,21 @@ struct Book
 // Simple Library System
 class SLS
 {
-private:
+public:
     Author author;
     Book book;
+    void insertAuthPrimaryIndex(char recsize[15] , char id[15]);
 
     // author and book files that contain the records
     fstream authorFile;
     fstream bookFile;
     fstream primaryIFile;
-
+    fstream secondaryFile;
+    fstream linkedFile;
     //
     // add your own index files as you need
     //
-
+    void addToLinked(char id[15] , char name[30]);
     // main file's functions
     void updateISBNIndex(char* isbn, int rrn, bool flag);
     int updateBookFileHeader(bool flag);
@@ -62,13 +68,14 @@ public:
     ~SLS();
 
     // main system's function that the user will use
+    void addAuthSecondaryIndex(char name[30] , char byteoffset[15]);
     void addAuthor();
     void addBook();
     void updateAuthorName();
     void updateBookTitle();
-    void deleteAuthor();
+    void deleteAuthor(int Id);
     void deleteBook();
-    void printAuthor();
+    void searchAuthor(int id);
     void printBook();
     void query();
 };
