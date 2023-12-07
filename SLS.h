@@ -96,7 +96,7 @@ public:
     void deleteBook(string isbn);
     void deleteAllAuthorBooks(string authorId);
 
-    void insertAuthorIndex(int recsize, char *id);
+//    void insertAuthorIndex(int recsize, char *id);
 
 public:
     //
@@ -114,7 +114,7 @@ public:
     void addAuthSecondaryIndex(char name[30] , char byteoffset[15]);
     void addAuthor();
     void addBook();
-    void updateAuthorName();
+    void updateAuthorName(char* id, char* name);
     void updateBookTitle();
     void deleteAuthor(int Id);
     void deleteBook();

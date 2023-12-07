@@ -8,8 +8,8 @@
 #include <vector>
 #include "SLS.h"
 using namespace std;
-int recsize = 3;
 int presize = 0;
+int recsize;
 int linkedresize = 0;
 vector <int> authorIds;
 map<int,long> indexing;
@@ -166,7 +166,7 @@ void SLS::insertAuthPrimaryIndex(char recsize[15] , char id[15])
     primaryIFile.close();
     char presizechar[15];
     std::snprintf(presizechar, strlen(presizechar), "%d", presize);
-    addToLinked(author.ID , author.name);
+//    addToLinked(author.ID , author.name);
     presize+=strlen(id)+1+ strlen(presizechar)+1;
 }
 
@@ -221,6 +221,18 @@ SLS::SLS()
         bookFile << "-1|---\n";
     }
     bookFile.close();
+
+    authorFile.open("author.txt", ios::app);
+    authorFile.seekg(0, ios::end);
+    tell = authorFile.tellg();
+    if (tell == 0)
+    {
+        authorFile << "-1\n";
+    }
+    authorFile.seekg(0, ios::end);
+    tell = authorFile.tellg();
+    recsize = tell;
+    authorFile.close();
 }
 
 SLS::SLS(Author a)
@@ -729,6 +741,10 @@ void SLS::deleteAllAuthorBooks(string authorId)
     loadAuthorSecIndex();
     loadIsbnSecList();
     authorId = string(14 - authorId.length(), '0') + authorId;
+    if(binarySearch(secAuthorIds,authorId) == -1)
+    {
+        return;
+    }
     int lineNum = secAuthorMap[authorId];
 
     while (lineNum > -1)
@@ -753,19 +769,39 @@ void SLS::deleteAllAuthorBooks(string authorId)
     }
     sAuthorIDListFile.close();
 }
-
+void SLS::searchAuthor(int Id)
+{
+    int check= binarySearch(authorIds,Id);
+    store_Index();
+//    auto check = indexing.find(Id);
+    if (check != -1) {
+        authorFile.open("file.txt", ios::in);
+        long ByteOffset=indexing[Id];
+        authorFile.seekg(ByteOffset,ios::beg);
+        //don't want print without it
+        authorFile.get();
+        string line;
+        getline(authorFile, line);
+        cout<<"the Author Founded.. \n";
+        istringstream ss(line);
+        string token;
+        vector<std::string> tokens;
+        while (std::getline(ss, token, '|')) {
+            tokens.push_back(token);
+        }
+        cout<<"Author's ID : "<<tokens[0]<<endl;
+        cout<<"Author's name : "<<tokens[1]<<endl;
+        cout<<"Author's Address : "<<tokens[2]<<endl;
+    }
+    else
+    {
+        cout<<"Sorry this author not exist\n";
+    }
+}
 // End of needed methods
 
 // ----------------------------------------------------------------------------------------------
 
-void SLS::insertAuthorIndex(int recsize, char *id)
-{
-    fstream pIndex = fstream("AuthorIDIndex.txt", ios::app);
-    pIndex.write((char *)id, strlen(id));
-    pIndex << " ";
-    pIndex << recsize;
-    pIndex << "\n";
-}
 
 // ----------------------------------------------------------------------------------------------
 
@@ -810,7 +846,7 @@ void SLS::addAuthor()
             authorFile.write((char*) (author.name) , strlen(author.name));
             authorFile << '|';
             authorFile.write((char*) (author.address) , strlen(author.address));
-            authorFile << "\n";
+            authorFile << "|";
             char buffer[15];
             std::snprintf(buffer, sizeof(buffer), "%s", (avl.c_str()));
             indexing[stoi(author.ID)] = stoi(avl);
@@ -823,18 +859,19 @@ void SLS::addAuthor()
             return;
         }
     }
+    if(authorFile.is_open()) authorFile.close();
     authorFile.open("author.txt" , ios::app);
     authorFile.write((char*)(author.ID) , strlen(author.ID));
     authorFile << '|';
     authorFile.write((char*) (author.name) , strlen(author.name));
     authorFile << '|';
     authorFile.write((char*) (author.address) , strlen(author.address));
-    authorFile << "\n";
+    authorFile << "|\n";
     char buffer[15];
     std::snprintf(buffer, sizeof(buffer), "%d", recsize);
     indexing[stoi(author.ID)] = recsize;
     insertAuthPrimaryIndex(buffer , author.ID);
-    recsize+=(strlen((author.ID)) + strlen((author.name)) + strlen((author.address)) + 3);
+    recsize+=(strlen((author.ID)) + strlen((author.name)) + strlen((author.address)) + 5);
     authorFile.close();
 }
 
@@ -880,8 +917,43 @@ void SLS::addBook()
 }
 
 // Update the author name using author ID
-void SLS::updateAuthorName()
+void SLS::updateAuthorName(char* id, char* name)
 {
+    string temp(id);
+    if(binarySearch(authorIds, stoi(temp)) == -1)
+    {
+        cout << "Invalid Author ID!\n";
+        return;
+    }
+    authorFile.open("author.txt", ios::in | ios:: app);
+    int byteOffset = indexing[stoi(temp)];
+    authorFile.seekg(byteOffset, ios::beg);
+    string aid;
+    string prevName;
+    char* address;
+    getline(authorFile, aid, '|');
+    getline(authorFile, prevName, '|');
+//    getline(authorFile, address, '|');
+    authorFile >> address;
+    authorFile.close();
+    if(prevName.length() >= strlen(name))
+    {
+        authorFile.open("author.txt", ios::in | ios:: out);
+        authorFile.seekp(byteOffset, ios::beg);
+        authorFile << aid << '|' << name << '|' << address << '|';
+        authorFile.close();
+    }
+    else
+    {
+        deleteAuthor(stoi(temp));
+        char tmp[15];
+        char ntmp[30];
+        char addtmp[30];
+        aid.copy(tmp, sizeof(tmp) - 1);
+//        address.copy(addtmp, strlen(address));
+        author = Author(id,name, address);
+        addAuthor();
+    }
 }
 
 // Update the book title using book ISBN
@@ -947,7 +1019,7 @@ void SLS::deleteAuthor(int Id)
         ///get size of record
         string record;
         authorFile.seekg(ByteOffset,ios::beg);
-        getline(authorFile,record,'\r');
+        getline(authorFile,record,'\n');
         string size=to_string(record.length());
         authorFile.seekg(ios::beg);
         authorFile.getline(List,sizeof (List));
@@ -970,40 +1042,13 @@ void SLS::deleteAuthor(int Id)
         indexing.erase(it);
         retrieve_into_index();
         cout<<"Done\n";
+//        indexing.erase(Id);
         deleteAllAuthorBooks(to_string(Id));
     }
     else
         cout<<"This author doesn't exist\n";
 }
-void SLS::searchAuthor(int Id)
-{
-    int check= binarySearch(authorIds,Id);
-    store_Index();
-//    auto check = indexing.find(Id);
-    if (check != -1) {
-        authorFile.open("file.txt", ios::in);
-        long ByteOffset=indexing[Id];
-        authorFile.seekg(ByteOffset,ios::beg);
-        //don't want print without it
-        authorFile.get();
-        string line;
-        getline(authorFile, line);
-        cout<<"the Author Founded.. \n";
-        istringstream ss(line);
-        string token;
-        vector<std::string> tokens;
-        while (std::getline(ss, token, '|')) {
-            tokens.push_back(token);
-        }
-        cout<<"Author's ID : "<<tokens[0]<<endl;
-        cout<<"Author's name : "<<tokens[1]<<endl;
-        cout<<"Author's Address : "<<tokens[2]<<endl;
-    }
-    else
-    {
-        cout<<"Sorry this author not exist\n";
-    }
-}
+
 
 // Delete book using book ISBN
 void SLS::deleteBook()
