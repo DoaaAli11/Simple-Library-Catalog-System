@@ -803,9 +803,9 @@ void SLS::searchAuthor(long Id)
         while (std::getline(ss, token, '|')) {
             tokens.push_back(token);
         }
-        cout<<"Author's ID : "<<tokens[0]<<endl;
-        cout<<"Author's name : "<<tokens[1]<<endl;
-        cout<<"Author's Address : "<<tokens[2]<<endl;
+        cout<<"Author's ID : "<<tokens[1]<<endl;
+        cout<<"Author's name : "<<tokens[2]<<endl;
+        cout<<"Author's Address : "<<tokens[3]<<endl;
     }
     else
     {
@@ -846,6 +846,7 @@ void SLS::addAuthor()
 {
     if( binarySearch(authorIds , stol(author.ID)) != -1)
     {
+        cout << "The Author ID is already exist!\n";
         return;
     }
     authorIds.push_back(stoi(author.ID));
@@ -870,6 +871,8 @@ void SLS::addAuthor()
         if(stoi(byteoffset) >= check)
         {
             authorFile.seekp(stoi(avl));
+            authorFile << record.length();
+            authorFile << '|';
             authorFile.write((char*)(author.ID) , strlen(author.ID));
             authorFile << '|';
             authorFile.write((char*) (author.name) , strlen(author.name));
@@ -890,6 +893,11 @@ void SLS::addAuthor()
     }
     if(authorFile.is_open()) authorFile.close();
     authorFile.open("author.txt" , ios::app);
+    authorFile.seekg(0, ios::end);
+    int tell = authorFile.tellg();
+
+    int recSize = (strlen((author.ID)) + strlen((author.name)) + strlen((author.address)) + 6);
+    authorFile << recSize << '|';
     authorFile.write((char*)(author.ID) , strlen(author.ID));
     authorFile << '|';
     authorFile.write((char*) (author.name) , strlen(author.name));
@@ -898,9 +906,9 @@ void SLS::addAuthor()
     authorFile << "|\n";
     char buffer[15];
     std::snprintf(buffer, sizeof(buffer), "%d", recsize);
-    indexing[stoi(author.ID)] = recsize;
+    indexing[stoi(author.ID)] = tell;
     insertAuthPrimaryIndex(buffer , author.ID);
-    recsize+=(strlen((author.ID)) + strlen((author.name)) + strlen((author.address)) + 5);
+    recsize+=recSize;
     authorFile.close();
 }
 // Add a book
@@ -958,6 +966,10 @@ void SLS::updateAuthorName(char* id, char* name)
     string aid;
     string prevName;
     char* address;
+    string recLen;
+    getline(authorFile, recLen);
+    authorFile.seekg(byteOffset, ios::beg);
+    getline(authorFile, aid, '|');
     getline(authorFile, aid, '|');
     getline(authorFile, prevName, '|');
     authorFile >> address;
@@ -968,7 +980,7 @@ void SLS::updateAuthorName(char* id, char* name)
     {
         authorFile.open("author.txt", ios::in | ios:: out);
         authorFile.seekp(byteOffset, ios::beg);
-        authorFile << aid << '|' << name << '|' << address << '|';
+        authorFile << recLen.length() << '|' << aid << '|' << name << '|' << address << '|';
         authorFile.close();
         secondary[name] = secondary[prevName];
         secondary[prevName] = -2;
@@ -1033,7 +1045,7 @@ void SLS::deleteAuthor(long Id, bool flag)
     {
         auto end = std::remove(authorIds.begin() , authorIds.end() , Id);
         authorIds.erase(end, authorIds.end());
-        string List;
+        string List, temp;
         ////get Avail List
         authorFile.open("author.txt" , ios::in);
         int ByteOffset=indexing[Id];
@@ -1044,6 +1056,7 @@ void SLS::deleteAuthor(long Id, bool flag)
         string size=to_string(record.length());
 
         authorFile.seekg(ByteOffset,ios::beg);
+        getline(authorFile,temp,'|');
         getline(authorFile,id,'|');
         getline(authorFile,name,'|');
         authorFile.seekg(ios::beg);
