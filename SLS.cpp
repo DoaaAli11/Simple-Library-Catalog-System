@@ -20,10 +20,15 @@ void SLS::loadLinkedSize(){
     string rec;
     while (getline(file,rec))
     {
-        linkedresize++;
+        string id;
+        string size;
+        istringstream is(rec);
+        is >> id >> size;
+        pair<long , int> line = make_pair(stoi(id) , stoi(size));
+        Inverted.push_back(line);
     }
-    if(linkedresize != 0)
-        linkedresize=-1;
+    for(auto line : Inverted)
+        cout << line.first << ' ' << line.second << endl;
 }
 void SLS::loadPindex(){
     fstream file("author_pIndex.txt" , ios::in);
@@ -44,19 +49,48 @@ void SLS::addToLinked(char id[15] , char name[30])
     linkedFile.seekp(0,ios::end);
     linkedFile.write((char *)id , sizeof(id));
     linkedFile << ' ';
-    linkedFile.write((char*) -1 , 2);
+    linkedFile.write((char*) "-1" , 2);
     linkedFile << '\n';
     linkedFile.close();
-    char buffer[15];
+    Inverted.push_back(pair<long , int>(stoi(id) , -1));
+    linkedresize = Inverted.size()-1;
+    char buffer[2];
     std::snprintf(buffer, sizeof(buffer), "%d", linkedresize);
-    linkedresize++;
     if(secondary.find(name) != secondary.end())
     {
-        long rcc = secondary[name];
-        linkedFile.open("lis_author.txt" , ios::in | ios::out);
-        linkedFile.seekp(rcc*19 + 16);
+        long temp;
+        long find = secondary[name];
+        long before;
+        if (Inverted[find].second == -1)
+        {
+            Inverted[find].second = linkedresize;
+        } else
+        {
+            temp = Inverted[find].second;
+            while (true)
+            {
+                if (temp == -1)
+                {
+                    break;
+                } else{
+                    before = temp;
+                }
+                temp = Inverted[temp].second;
 
-
+            }
+        }
+        Inverted[before].second = linkedresize;
+        ///////////////////////////////////////////////////////////
+        linkedFile.open("list_author.txt" , ios::out);
+        for (int i = 0; i < Inverted.size(); ++i) {
+            long id = Inverted[i].first;
+            int recnum = Inverted[i].second;
+            linkedFile.write((char *)(to_string(id).c_str()) , 15);
+            linkedFile << ' ';
+            linkedFile.write((char*)(to_string(recnum)).c_str() , 2);
+            linkedFile <<'\n';
+        }
+        linkedFile.close();
     }
     else {
         addAuthSecondaryIndex(name, buffer);
@@ -148,7 +182,7 @@ void SLS::insertAuthPrimaryIndex(char recsize[15] , char id[15])
     primaryIFile.close();
     char presizechar[15];
     std::snprintf(presizechar, strlen(presizechar), "%d", presize);
-//    addToLinked(author.ID , author.name);
+    addToLinked(author.ID , author.name);
     presize+=strlen(id)+1+ strlen(presizechar)+1;
 }
 
