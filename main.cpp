@@ -14,7 +14,7 @@ int main()
     system.loadLinkedSize();
     char aName[30];
     char aid[15];
-    int choice = 1;
+    long choice = 1, searchId;
     string query;
     cout << "Welcome to our simple library system :)\n\n";
     while (choice != 0)
@@ -73,7 +73,9 @@ int main()
                 system.deleteBook();
                 break;
             case 7:
-                system.searchAuthor(stoi(system.author.ID));
+                cout << "Enter Author Id: ";
+                cin >> searchId;
+                system.searchAuthor(searchId);
                 break;
             case 8:
                 cout << "Enter book ISBN: ";

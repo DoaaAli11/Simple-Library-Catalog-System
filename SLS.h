@@ -99,8 +99,8 @@ public:
     int binarySearch(const vector<long> &iDs, long id);
     int setCurByteOffset();
     Book searchBook(string isbn);
-    void addBook(Book b);
-    void deleteBook(string isbn);
+    void addBook(Book b, bool flag);
+    void deleteBook(string isbn, bool flag);
     void deleteAllAuthorBooks(string authorId);
     vector<Book> searchAllAuthorBooks(string authorId);
     int findAuthSecondary(char name[30]);
