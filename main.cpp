@@ -84,7 +84,7 @@ int main()
                 break;
             case 9:
                 cout << "Enter Your Query: ";
-                cin.ignore();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 getline(cin,query);
                 system.writeQuery(query);
                 break;
