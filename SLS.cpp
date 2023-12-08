@@ -933,7 +933,7 @@ void SLS::addBook()
     cout << "Enter book title: ";
     char t[30];
     cin.ignore();
-    cin >> t;
+    scanf("%29[^\n]", t);
 
     cout << "Enter book author ID: ";
     cin.ignore();
@@ -964,18 +964,21 @@ void SLS::updateAuthorName(char* id, char* name)
     int byteOffset = indexing[stoi(temp)];
     authorFile.seekg(byteOffset, ios::beg);
     string aid;
-    string prevName;
-    char* address;
+    string prevName, pAddress;
     string recLen;
     getline(authorFile, recLen);
     authorFile.seekg(byteOffset, ios::beg);
     getline(authorFile, aid, '|');
     getline(authorFile, aid, '|');
     getline(authorFile, prevName, '|');
-    authorFile >> address;
+    getline(authorFile, pAddress, '|');
     authorFile.close();
-    int len = strlen(address);
-    address[len - 1] = '\0';
+
+    char address[pAddress.size() + 1];
+    copy(pAddress.begin(), pAddress.end(), address);
+    address[pAddress.size()] = '\0';
+    int len = pAddress.length();
+
     if(prevName.length() >= strlen(name))
     {
         authorFile.open("author.txt", ios::in | ios:: out);
@@ -1017,14 +1020,18 @@ void SLS::updateBookTitle()
     cout << "Enter the new title: ";
     char newTitle[30];
     cin.ignore();
-    cin >> newTitle;
+    scanf("%29[^\n]", newTitle);
 
-    if (strlen(newTitle) == strlen(book.title))
+    if (strlen(newTitle) <= strlen(book.title))
     {
         strcpy(book.title, newTitle);
         bookFile.open("Book.txt", ios::out | ios::in);
-        bookFile.seekp(byteOffset + 18, ios::beg);
-        bookFile << newTitle;
+        bookFile.seekg(byteOffset, ios::beg);
+        string rec;
+        getline(bookFile,rec);
+
+        bookFile.seekp(byteOffset, ios::beg);
+        bookFile << rec.length() << '|' << book.ISBN << '|' << newTitle << '|' << book.authorID << '|';
         bookFile.close();
     }
     else if (strlen(newTitle) > strlen(book.title))
